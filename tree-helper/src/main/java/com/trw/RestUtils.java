@@ -3,6 +3,7 @@ package com.trw;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -82,11 +83,10 @@ public class RestUtils {
         }
     }
 
-    private static String getJson(String username, String password) throws IOException {
+    private static HttpResponse getHttpResponse(String username, String password, HttpRequest httpRequest) throws IOException {
         HttpHost targetHost = new HttpHost(Environment.HOST, PORT, "http");
 
         DefaultHttpClient httpclient = new DefaultHttpClient();
-
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(targetHost.getHostName(), targetHost.getPort()),
                 new UsernamePasswordCredentials(username, password));
@@ -101,8 +101,12 @@ public class RestUtils {
         BasicHttpContext localcontext = new BasicHttpContext();
         localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
 
+        return httpclient.execute(targetHost, httpRequest, localcontext);
+    }
+
+    private static String getJson(String username, String password) throws IOException {
         HttpGet httpget = new HttpGet("/driver/php/db-get-pickups.php");
-        HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
+        HttpResponse response = getHttpResponse(username, password, httpget);
         try (BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
             StringBuilder sb = new StringBuilder("");
             String line;
@@ -115,27 +119,9 @@ public class RestUtils {
     }
 
     private static void putJson(String username, String password, String json) throws IOException {
-        HttpHost targetHost = new HttpHost(Environment.HOST, PORT, "http");
-
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-
-        httpclient.getCredentialsProvider().setCredentials(
-                new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-                new UsernamePasswordCredentials(username, password));
-
-        // Create AuthCache instance
-        AuthCache authCache = new BasicAuthCache();
-        // Generate BASIC scheme object and add it to the local auth cache
-        BasicScheme basicAuth = new BasicScheme();
-        authCache.put(targetHost, basicAuth);
-
-        // Add AuthCache to the execution context
-        BasicHttpContext localcontext = new BasicHttpContext();
-        localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
-
         HttpPost httpPost = new HttpPost("/driver/php/db-update-pickup-info.php");
         httpPost.setEntity(new StringEntity(json));
-        HttpResponse response = httpclient.execute(targetHost, httpPost, localcontext);
+        HttpResponse response = getHttpResponse(username, password, httpPost);
         if (response.getStatusLine().getStatusCode()!=200) {
             throw new RuntimeException("server returned status code " + response.getStatusLine().getStatusCode());
         }
