@@ -1,0 +1,10 @@
+host=ROOT_OF_HOSTING_WEBSITE
+
+google.maps.api.key=YOUR_KEY
+starting.point=1234 Main St, Anywhere, MA
+town.lowercase=anywhere
+town.and.state=Anywhere, TXT
+zone.spreadsheet.file=/Users/bob/bob-trees.xslx
+
+driver.username=troop4
+driver.password=troop4
