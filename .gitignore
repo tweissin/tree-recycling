@@ -3,3 +3,4 @@
 .idea
 target/
 tree-helper.properties
+~*.xlsx
