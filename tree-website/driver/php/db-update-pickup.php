@@ -1,6 +1,6 @@
 <?php
 
-require( '../../config.php');
+require('db-utils.php');
 
 function update_pickup_state($id, $status, $driver)
 {
@@ -27,13 +27,6 @@ function update_pickup_state($id, $status, $driver)
         echo 'Could not update pickup: ' . mysql_error();
         exit;
     }
-}
-
-function error_exit($message, $code) 
-{
-    header('HTTP/1.1 500 Internal Server Booboo');
-    header('Content-Type: application/json; charset=UTF-8');
-    die(json_encode(array('message' => $message, 'code' => $code)));
 }
 
 $str_json = file_get_contents('php://input');

@@ -32,7 +32,7 @@
 
 <div class="container">
 
-    <h1>Hello world!</h1>
+    <h1>Database Importer</h1>
 What do you want to do today?<p/>
 
     <button id="exportProduction" class="btn btn-default" type="submit">Export Production DB records to JSON</button><br/>
@@ -41,8 +41,8 @@ What do you want to do today?<p/>
     <button id="importIntoTempDb" class="btn btn-default" type="submit">Import JSON into temp DB</button><br/>
 
     <div class="form-group">
-        <label for="data">Exported records:</label>
-        <textarea class="form-control" rows="50" id="exportedRecords"></textarea>
+        <label for="data">JSON records:</label>
+        <textarea class="form-control" rows="50" id="jsonRecords"></textarea>
     </div>
 </div>
 

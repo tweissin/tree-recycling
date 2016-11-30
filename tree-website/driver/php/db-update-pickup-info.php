@@ -1,6 +1,6 @@
 <?php
 
-require( '../../config.php');
+require('db-utils.php');
 
 function execute_update($set, $id) {
     $result = mysql_query("UPDATE tom_tmp_pickup SET " . $set . " where id=" . $id);
@@ -37,13 +37,6 @@ function update_pickup_info($id, $address, $zone, $route_order)
     if ($route_order!=null) {
         execute_update("route_order = " . $route_order, $id);
     }
-}
-
-function error_exit($message, $code) 
-{
-    header('HTTP/1.1 500 Internal Server Booboo');
-    header('Content-Type: application/json; charset=UTF-8');
-    die(json_encode(array('message' => $message, 'code' => $code)));
 }
 
 $str_json = file_get_contents('php://input');
