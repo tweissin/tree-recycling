@@ -9,7 +9,7 @@ $(document).ready(function() {
             }),
             success: function(data) {
                 console.log("success");
-                $("#jsonRecords").text(JSON.stringify(JSON.parse(data),null,4));
+                $("#jsonRecords").text(JSON.stringify(data,null,4));
             },
             error: function(xhr, status, error) {
                 console.log("error, status:", status, " error:", error);
