@@ -6,27 +6,6 @@ $(document).ready(function() {
     const UI_ID=0, UI_NAME=1, UI_STREET=2, UI_NOTES=3, UI_STATUS=4, UI_ZONE=5, UI_ROUTE_ORDER=6, UI_WEEKEND=7, UI_DRIVER=8, UI_EMAIL=9, UI_PHONE=10, UI_ADDRESS=11;
     var dataTable;
 
-    function getWeekArray(data) {
-        var weekArray = [];
-        for (var x=0; x<data.length; x++) {
-            weekArray.push({
-                id: data[x].id,
-                name: data[x].name,
-                street: data[x].street,
-                address: data[x].address,
-                comment: data[x].comments,
-                driver: data[x].driver,
-                status: data[x].status,
-                route_order: data[x].route_order,
-                zone: data[x].zone,
-                email: data[x].email,
-                phone: data[x].phone,
-                weekend: data[x].weekend
-            });
-        } 
-        return weekArray;
-    }
-
     function getZones(data) {
         var zones = [];
         for (var x=0; x<data.length; x++) {
@@ -138,7 +117,7 @@ $(document).ready(function() {
                 { "data": "notes" },
                 { "data": "status" },
                 { "data": "zone" },
-                { "data": "order" },
+                { "data": "route_order" },
                 { "data": "weekend" },
                 { "data": "driver" },
                 { "data": "email" },

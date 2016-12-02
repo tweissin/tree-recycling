@@ -10,7 +10,7 @@ $desiredFields = array(
     "notes",
     "status",
     "zone",
-    "order",
+    "route_order",
     "weekend",
     "driver",
     "email",

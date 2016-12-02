@@ -19,6 +19,7 @@ function get_rows($table_name, $datatables=false, $desiredFields=null)
         if ($desiredFields) {
             $desiredRow = array();
             foreach ($desiredFields as $desiredField) {
+                // TODO: throw an error if field doesn't exist in table
                 $desiredRow[$desiredField] = $row[$desiredField];
             }
             array_push($rows, $desiredRow);
