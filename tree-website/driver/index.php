@@ -87,9 +87,7 @@ if (!isset($_SESSION['valid']))
             <th>Address</th>
           </tr>
           </tfoot>
-          <tbody>
-          </tbody>
-          </table>
+        </table>
       </form>
     </div>
 

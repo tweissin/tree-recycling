@@ -66,29 +66,16 @@ $(document).ready(function() {
     function getDataForId(id) {
         var allData = $('#example').DataTable().data();
         for (var x=0; x<allData.length; x++) {
-            if (allData[x][UI_ID]==id) {
-                var data = allData[x];
-                var dataMap = {
-                    id: data[UI_ID],
-                    name: data[UI_NAME],
-                    street: data[UI_STREET],
-                    address: data[UI_ADDRESS],
-                    encodedAddress: encodeURI(data[UI_ADDRESS]),
-                    notes: data[UI_NOTES],
-                    driver: data[UI_DRIVER],
-                    email: data[UI_EMAIL],
-                    phone: data[UI_PHONE],
-                    status: data[UI_STATUS]
-                };
-                return dataMap;
+            if (allData[x]["id"]==id) {
+                return allData[x];
             }
         }
         return null;
     }
 
     function setupEvents() {
-        $("table tr").click(function() {
-            var id = $(this).attr('id');
+        $("#example tr").click(function() {
+            var id = $(this).find("td").first().text();
             var data = getDataForId(id);
             var detailsHtml = detailsTemplate(data);
             var driver = $("#driver");
@@ -118,7 +105,7 @@ $(document).ready(function() {
                         var saveStatus = $("#saveStatus");
                         saveStatus.text("Saved!");
                         saveStatus.fadeIn();
-                        dataTable.draw();
+                        $('#example').DataTable().ajax.reload();
                     },
                     error: function(xhr, status, error) {
                         var saveStatus = $("#saveStatus");
@@ -136,30 +123,39 @@ $(document).ready(function() {
     function refresh() {
         $.getJSON("php/db-get-pickups.php", function(data) {
             console.log('read pickups from db');
-        
-            var weekArray = getWeekArray(data);
-            var customers = { customer: weekArray };
-            var customersHtml = entryTemplate(customers);
-            $("tbody").html(customersHtml);
 
             var zones = { zone: getZones(data) };
             var zonesHtml = zoneTemplate(zones);
             $("#selectZone").append(zonesHtml);
-
-            dataTable = $('#example').DataTable( {
-                "order": [[ UI_ZONE, 'asc'], [UI_ROUTE_ORDER, 'asc']],
-                    "columnDefs": [
-                        {
-                            "targets": [ UI_ID, UI_EMAIL, UI_PHONE, UI_ADDRESS ], // hide
-                            "visible": false
-                        }
-                    ],
-                    "fnDrawCallback": function( oSettings ) {
-                          setupEvents();
-                    }
-            });
-
         });
+
+        $('#example').DataTable( {
+            "ajax": 'php/db-get-pickups.php?dt=true',
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "street" },
+                { "data": "notes" },
+                { "data": "status" },
+                { "data": "zone" },
+                { "data": "order" },
+                { "data": "weekend" },
+                { "data": "driver" },
+                { "data": "email" },
+                { "data": "phone" },
+                { "data": "address" }
+            ],
+            "order": [[ UI_ZONE, 'asc'], [UI_ROUTE_ORDER, 'asc']],
+            "columnDefs": [
+                {
+                    "targets": [ UI_EMAIL, UI_PHONE, UI_ADDRESS ], // hide
+                    "visible": false
+                }
+            ],
+            "fnDrawCallback": function( oSettings ) {
+                setupEvents();
+            }
+        } );
         var driver = $("#driver");
         $.getJSON("php/session.php", function(data){
             if (data.driver) {

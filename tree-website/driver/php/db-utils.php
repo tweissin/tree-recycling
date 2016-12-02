@@ -1,7 +1,7 @@
 <?php
 require( '../../config.php');
 
-function get_rows($table_name)
+function get_rows($table_name, $datatables=false, $desiredFields=null)
 {
     $connid = mysql_connect( DB_HOST, DB_UNAME, DB_PSWD) or die("Could not connect : " . mysql_error());
 
@@ -13,10 +13,21 @@ function get_rows($table_name)
         return array();
     }
 
-    $rows = array();
     $result = mysql_query( "select * from " . $table_name);
+    $rows = array();
     while ($row = mysql_fetch_assoc($result)) {
-        array_push($rows, $row);
+        if ($desiredFields) {
+            $desiredRow = array();
+            foreach ($desiredFields as $desiredField) {
+                $desiredRow[$desiredField] = $row[$desiredField];
+            }
+            array_push($rows, $desiredRow);
+        } else {
+            array_push($rows, $row);
+        }
+    }
+    if ($datatables) {
+        return array("data" => $rows);
     }
     return $rows;
 }
