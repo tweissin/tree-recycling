@@ -84,7 +84,7 @@ $(document).ready(function() {
                         var saveStatus = $("#saveStatus");
                         saveStatus.text("Saved!");
                         saveStatus.fadeIn();
-                        $('#example').DataTable().ajax.reload();
+                        $('#example').DataTable().ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
                         var saveStatus = $("#saveStatus");
