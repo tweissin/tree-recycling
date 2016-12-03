@@ -33,6 +33,23 @@ function get_rows($table_name, $datatables=false, $desiredFields=null)
     return $rows;
 }
 
+function exec_sql($stmt) {
+    $connid = mysql_connect( DB_HOST, DB_UNAME, DB_PSWD) or die("Could not connect : " . mysql_error());
+    $selected = mysql_select_db( DB_NAME, $connid);
+    if ( $selected == false)
+    {
+        $last_err = error_get_last();
+        error_exit("Database not selected: " . $last_err["message"],2048);
+        return;
+    }
+    $success = mysql_query($stmt);
+    if (!$success) {
+        $last_err = error_get_last();
+        error_exit("failed to exec sql: " . $last_err["message"],3072);
+        return;
+    }
+}
+
 function error_exit($message, $code)
 {
     header('HTTP/1.1 500 Internal Server Booboo');
