@@ -50,6 +50,43 @@ function exec_sql($stmt) {
     }
 }
 
+// TODO: make variable argument list
+function exec_prepared_statement($sql, $types, $arg1, $arg2) {
+    $link = mysqli_connect(DB_HOST, DB_UNAME, DB_PSWD);
+    if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }
+
+    mysqli_select_db($link, DB_NAME);
+
+    if ($stmt = mysqli_prepare($link, $sql)) {
+        mysqli_stmt_bind_param($stmt, $types, $arg1, $arg2);
+        $success = mysqli_stmt_execute($stmt);
+
+        if (!$success) {
+            header('HTTP/1.1 500 Internal Server Booboo');
+            header('Content-Type: application/json; charset=UTF-8');
+            print json_encode(array(
+                    "error_msg" => mysqli_stmt_error($stmt),
+                    "error_id" => mysqli_stmt_errno($stmt))
+            );
+            exit();
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+        header('HTTP/1.1 500 Internal Server Booboo');
+        header('Content-Type: application/json; charset=UTF-8');
+        print json_encode(array(
+                "error_msg" => mysqli_error($link),
+                "error_id" => mysqli_errno($link))
+        );
+        exit();
+    }
+    mysqli_close($link);
+}
+
 function error_exit($message, $code)
 {
     header('HTTP/1.1 500 Internal Server Booboo');
