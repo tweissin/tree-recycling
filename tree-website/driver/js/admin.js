@@ -1,7 +1,25 @@
 $(document).ready(function() {
 
     $("#delete").click(function(){
-        console.log("delete clicked")
+        setStatus("");
+        $('#userTable').find('input[type="checkbox"]:checked').each(function () {
+            var username = $(this).parent().parent().find("td").first().text();
+            $.ajax({
+                url: '../php/db-delete-user.php?username=' + username,
+                type: 'DELETE',
+                success: function(result) {
+                    var msg = $("#status").text();
+                    msg += "(deleted " + username + ")";
+                    setStatus(msg);
+                    refreshUserList();
+                },
+                error: function() {
+                    var msg = $("#status").text();
+                    msg += "(FAILED to delete " + username + ")";
+                    setStatus(msg);
+                }
+            });
+        });
     });
 
     function setStatus(msg) {

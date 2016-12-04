@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <h1>User list</h1>
-    <table class="table table-striped">
+    <table id="userTable" class="table table-striped">
         <thead>
         <tr>
             <td>Username</td>
