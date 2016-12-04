@@ -33,6 +33,7 @@
         </div>
         <button id="add" type="submit" class="btn btn-default">Add</button>
     </form>
+    <div id="status" style="display: none;"></div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>

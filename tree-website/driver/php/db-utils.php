@@ -50,8 +50,7 @@ function exec_sql($stmt) {
     }
 }
 
-// TODO: make variable argument list
-function exec_prepared_statement($sql, $types, $arg1, $arg2) {
+function exec_prepared_statement($sql, $types, $args) {
     $link = mysqli_connect(DB_HOST, DB_UNAME, DB_PSWD);
     if (mysqli_connect_errno()) {
         printf("Connect failed: %s\n", mysqli_connect_error());
@@ -61,7 +60,20 @@ function exec_prepared_statement($sql, $types, $arg1, $arg2) {
     mysqli_select_db($link, DB_NAME);
 
     if ($stmt = mysqli_prepare($link, $sql)) {
-        mysqli_stmt_bind_param($stmt, $types, $arg1, $arg2);
+        switch (count($args)) {
+            case 1:
+                mysqli_stmt_bind_param($stmt, $types, $args[0]);
+                break;
+            case 2:
+                mysqli_stmt_bind_param($stmt, $types, $args[0], $args[1]);
+                break;
+            case 3:
+                mysqli_stmt_bind_param($stmt, $types, $args[0], $args[1], $args[2]);
+                break;
+            default:
+                error_exit("can't handle this number of args: " . count($args), 5001);
+                break;
+        }
         $success = mysqli_stmt_execute($stmt);
 
         if (!$success) {

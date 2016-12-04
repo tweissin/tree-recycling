@@ -14,4 +14,4 @@ for ($i=0; $i<count($rows); $i++) {
     }
 }
 
-exec_prepared_statement("insert into user (username,password) values (?,?)", "ss", $array["username"], $array["password"]);
+exec_prepared_statement("insert into user (username,password) values (?,?)", "ss", array($array["username"], $array["password"]));
