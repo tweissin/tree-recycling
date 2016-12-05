@@ -1,6 +1,6 @@
 <?php
 
-require('db-utils.php');
+require_once('db-utils.php');
 
 if ($_SERVER['REQUEST_METHOD'] != 'DELETE') {
     error_exit("this only handles DELETE requests", 5001);

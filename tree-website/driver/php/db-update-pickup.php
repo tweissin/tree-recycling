@@ -1,6 +1,6 @@
 <?php
 
-require('db-utils.php');
+require_once('db-utils.php');
 
 function update_pickup_state($id, $status, $driver)
 {

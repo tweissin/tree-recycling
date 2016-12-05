@@ -1,6 +1,6 @@
 <?php
 
-require('db-utils.php');
+require_once('db-utils.php');
 
 $str_json = file_get_contents('php://input');
 $array = json_decode(json_encode(json_decode($str_json)), true);

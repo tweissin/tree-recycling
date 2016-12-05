@@ -1,6 +1,6 @@
 <?php
 
-require('db-utils.php');
+require_once('db-utils.php');
 
 function export_to_csv($table_name) {
     $data = get_rows($table_name);

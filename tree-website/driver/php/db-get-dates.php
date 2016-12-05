@@ -1,5 +1,5 @@
 <?php
-require('db-utils.php');
+require_once('db-utils.php');
 
 header("Content-Type: application/json");
 $data = get_rows("dates");

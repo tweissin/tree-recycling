@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('php/password.php');
+require_once('php/password.php');
 
 define("HTPASSWDFILE", "access.txt");
 

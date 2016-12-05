@@ -2,7 +2,7 @@
 /**
  * Use this to generate a new password to go into access.txt.
  */
-include('php/password.php');
+require_once('php/password.php');
 
 if (isset($_POST['submit']) && !empty($_POST['text'])) {
     echo password_hash($_POST['text'],PASSWORD_BCRYPT);

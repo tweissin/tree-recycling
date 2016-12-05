@@ -1,5 +1,5 @@
 <?php
-require( '../../config.php');
+require_once( '../../config.php');
 
 function get_rows($table_name, $datatables=false, $desiredFields=null)
 {
