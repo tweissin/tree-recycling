@@ -1,20 +1,17 @@
 <?php
 session_start();
-require_once('php/password.php');
-
-define("HTPASSWDFILE", "access.txt");
+require_once('config.php');
+require_once(BASEDIR . '/php/password.php');
+require_once(BASEDIR . '/php/db-utils.php');
 
 function load_htpasswd()
 {
-    if ( !file_exists(HTPASSWDFILE))
-        return Array();
-
+    $users = get_rows("user");
     $res = Array();
-    foreach(file(HTPASSWDFILE) as $l)
+    foreach($users as $u)
     {
-        $array = explode(':',$l);
-        $user = $array[0];
-        $pass = chop($array[1]);
+        $user = $u["username"];
+        $pass = $u["password"];
         $res[$user] = $pass;
     }
     return $res;

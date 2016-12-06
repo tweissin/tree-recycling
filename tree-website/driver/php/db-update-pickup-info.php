@@ -1,6 +1,7 @@
 <?php
 
-require_once('db-utils.php');
+require_once('../config.php');
+require_once(BASEDIR . '/php/db-utils.php');
 
 function execute_update($set, $id) {
     $result = mysql_query("UPDATE tom_tmp_pickup SET " . $set . " where id=" . $id);
