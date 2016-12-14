@@ -1,5 +1,7 @@
 <html>
 <head>
+    <title>Driver Admin</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- Optional theme -->
@@ -34,6 +36,55 @@
         <button id="add" type="submit" class="btn btn-default">Add</button>
     </form>
     <div id="status" style="display: none;"></div>
+
+<?php
+require_once('../config.php');
+require_once(BASEDIR . '/php/db-utils.php');
+
+function get_emails()
+{
+    $date_0 = array();
+    $date_1 = array();
+    $date_2 = array();
+    $emails = array(
+        "date_0" => $date_0,
+        "date_1" => $date_1,
+        "date_2" => $date_2
+    );
+
+    foreach (get_rows("tmp_pickup") as $pickup)
+    {
+        $arr = $emails[$pickup["weekend"]];
+        array_push($arr, $pickup["email"]);
+        $emails[$pickup["weekend"]] = $arr;
+    }
+    return $emails;
+}
+
+function get_dates()
+{
+    $dates = array();
+    foreach (get_rows("dates") as $date_row)
+    {
+        $dates["date_" . ($date_row["date_num"]-1)] = $date_row["cal_date"];
+    }
+
+    return $dates;
+}
+
+$dates = get_dates();
+foreach (get_emails() as $weekend => $emails)
+{
+    echo "<h1>Emails ${dates[$weekend]}</h1>";
+    echo "All the email addresses:<p>";
+    echo "<span class='emails'>";
+    foreach ($emails as $email)
+    {
+        echo "${email} ";
+    }
+    echo "</span>";
+}
+?>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
