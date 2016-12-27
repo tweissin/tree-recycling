@@ -111,6 +111,7 @@ $(document).ready(function() {
 
         $('#example').DataTable( {
             "ajax": 'php/db-get-pickups.php?dt=true',
+            "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
             "columns": [
                 { "data": "id" },
                 { "data": "name" },

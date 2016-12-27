@@ -39,6 +39,7 @@ public class RestUtils {
 
     /**
      * Returns a map of ID to pickup info.
+     * It gets only the specified weekend.
      */
     public static Map<Integer,Map<String,String>> getPickupInfo(String username, String password, int weekendNum) throws IOException {
         logger.info("getPickupInfo");
@@ -48,7 +49,8 @@ public class RestUtils {
         for (Object pickup : pickups) {
             if (pickup instanceof Map) {
                 String weekend = (String) ((Map)pickup).get("weekend");
-                if (String.valueOf(weekendNum).equals(weekend)) {
+                String compareWeeknd = "date_" + (weekendNum-1);
+                if (compareWeeknd.equals(weekend)) {
                     Map<String,String> pickupInfo = new HashMap<>();
                     String id = (String) ((Map)pickup).get("id");
                     pickupInfo.put("id",id);

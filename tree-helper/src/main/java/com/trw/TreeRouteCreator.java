@@ -33,6 +33,11 @@ public class TreeRouteCreator {
         // Make REST call to get all existing addresses
         Map<Integer, Map<String, String>> pickupInfos = RestUtils.getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, weekend);
 
+        if (pickupInfos.size()==0) {
+            logger.error("There are no pickups");
+            return;
+        }
+
         // Fix all addresses locally
         updatePickupInfos(pickupInfos, file);
 
