@@ -9,14 +9,34 @@ function export_to_csv($table_name) {
     print json_encode($data);
 }
 
+/**
+ * Check if row exists.
+ * @param $current_rows all current rows
+ * @param $data_for_import the proposed data for import
+ * @return bool true if the row exists
+ */
+function does_row_exist($current_rows, $data_for_import) {
+    for ($i=0; $i<count($current_rows); $i++) {
+        $current_row = $current_rows[$i];
+        if ($current_row["id"] == $data_for_import["id"]) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function import_from_csv($table_name, $data) {
-    $connid = mysql_connect( DB_HOST, DB_UNAME, DB_PSWD) or die("Could not connect : " . mysql_error());
-    $selected = mysql_select_db( DB_NAME, $connid);
+    $link = mysqli_connect(DB_HOST, DB_UNAME, DB_PSWD);
+    if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }
+    $selected = mysqli_select_db($link, DB_NAME);
     if ( $selected == false) {
         error_exit("can't select that DB", 1234);
     }
 
-    mysql_query("BEGIN");
+    mysqli_query($link, "BEGIN");
 
     $schema = array(
         "temp"=>"text",
@@ -40,46 +60,57 @@ function import_from_csv($table_name, $data) {
         "route_order"=>"number",
         );
 
-    foreach ($data as $value) {
+    $current_rows = get_rows($table_name);
+
+    for ($i=0; $i<count($data); $i++) {
+        $data_for_import = $data[$i];
+        if (does_row_exist($current_rows, $data_for_import)) {
+            continue;
+        }
 
         $stmt = "INSERT INTO $table_name (";
         $first = true;
         foreach ($schema as $field => $type) {
-            if (!$first) {
-                $stmt = "$stmt, ";
+            if (array_key_exists($field, $data_for_import)) {
+                if (!$first) {
+                    $stmt = "$stmt, ";
+                }
+                $first = false;
+                $stmt = "${stmt}${field}";
             }
-            $first = false;
-            $stmt = "${stmt}${field}";
         }
         $stmt = "${stmt}) VALUES (";
         $first = true;
         foreach ($schema as $field => $type) {
-            if (!$first) {
-                $stmt = "$stmt, ";
-            }
-            $first = false;
-            $val = $value[$field];
-            if ($type=="text") {
-                $stmt = "${stmt} '${val}'";
-            } else {
-                if (strlen($val)==0) {
-                    $val = 0;
+            if (array_key_exists($field, $data_for_import)) {
+                if (!$first) {
+                    $stmt = "$stmt, ";
                 }
-                $stmt = "${stmt} ${val}";
+                $first = false;
+                $val = $data_for_import[$field];
+                if ($type=="text") {
+                    $val = mysql_real_escape_string($val);
+                    $stmt = "${stmt} '${val}'";
+                } else {
+                    if (strlen($val)==0) {
+                        $val = 0;
+                    }
+                    $stmt = "${stmt} ${val}";
+                }
             }
         }
         $stmt = "${stmt})";
 
-        $success = mysql_query($stmt);
+        $success = mysqli_query($link, $stmt);
         if (!$success) {
             $last_err = error_get_last();
-            mysql_query("ROLLBACK");
+            mysqli_query($link,"ROLLBACK");
             print_r ($last_err);
             error_exit("failed to insert: " . $last_err["message"],1024);
             return;
         }
     }
-    mysql_query("COMMIT");
+    mysqli_query($link,"COMMIT");
 }
 
 $str_json = file_get_contents('php://input');
