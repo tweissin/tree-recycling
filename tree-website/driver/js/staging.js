@@ -2,7 +2,7 @@ $(document).ready(function() {
     function exportIt(tableName) {
         $.ajax({
             type: 'POST',
-            url: 'php/db-staging.php',
+            url: '../php/db-staging.php',
             data: JSON.stringify({
                 op: "export",
                 table: tableName
@@ -21,7 +21,7 @@ $(document).ready(function() {
         var jsonData = JSON.parse(data);
         $.ajax({
             type: 'POST',
-            url: 'php/db-staging.php',
+            url: '../php/db-staging.php',
             data: JSON.stringify({
                 op: "import",
                 table: tableName,
@@ -36,17 +36,16 @@ $(document).ready(function() {
         });
     }
 
-    $("#exportProduction").click(function() {
-        exportIt("tmp_pickup");
+    $.getJSON("../php/db-get-table-names.php", function(tables) {
+        for (var i = 0; i < tables.length; i++) {
+            var table = tables[i];
+            $('<option value="' + table + '">' + table + '</option>').appendTo("#tableNames");
+        }
     });
 
-    $("#exportTempDb").click(function() {
-        exportIt("tom_tmp_pickup");
-    });
-
-    $("#importIntoProduction").click(function() {
-        //importIt("tmp_pickup");
-        console.log("not gonna do it");
+    $("#exportTable").click(function() {
+        var table = $('#tableNames').find(":selected").text();
+        exportIt(table);
     });
 
     $("#importIntoTempDb").click(function() {

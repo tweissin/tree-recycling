@@ -10,6 +10,8 @@
 </head>
 <body>
 <div class="container">
+
+    <!-- User List -->
     <h1>User list</h1>
     <table id="userTable" class="table table-striped">
         <thead>
@@ -23,6 +25,7 @@
     </table>
     <button id="delete">Delete checked</button>
 
+    <!-- Add User -->
     <h1>Add user</h1>
     <form>
         <div class="form-group">
@@ -37,7 +40,22 @@
     </form>
     <div id="status" style="display: none;"></div>
 
-<?php
+    <!-- Import/Export -->
+    <h1>Tree Pickup Import/Export</h1>
+    What do you want to do today?<p/>
+
+    <button id="exportTable" class="btn btn-default" type="submit">Export DB records to JSON</button>
+    <select id="tableNames"></select>
+    <br/>
+    <button id="importIntoTempDb" class="btn btn-default" type="submit">Import JSON into temp DB</button><br/>
+
+    <div class="form-group">
+        <label for="data">JSON records:</label>
+        <textarea class="form-control" rows="50" id="jsonRecords"></textarea>
+    </div>
+
+
+    <?php
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
 
@@ -80,7 +98,7 @@ foreach (get_emails() as $weekend => $emails)
     echo "<span class='emails'>";
     foreach ($emails as $email)
     {
-        echo "${email} ";
+        echo "${email},";
     }
     echo "</span>";
 }
@@ -96,6 +114,7 @@ foreach (get_emails() as $weekend => $emails)
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
 
 <script src="../js/admin.js"></script>
+<script src="../js/staging.js"></script>
 </body>
 </html>
 
