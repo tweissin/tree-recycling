@@ -61,5 +61,60 @@ $(document).ready(function() {
         });
     });
 
+    function exportIt(tableName) {
+        setStatus("");
+        $.ajax({
+            type: 'POST',
+            url: '../php/db-staging.php',
+            data: JSON.stringify({
+                op: "export",
+                table: tableName
+            }),
+            success: function(data) {
+                setStatus("successfully exported data");
+                $("#jsonRecords").text(JSON.stringify(data,null,4));
+            },
+            error: function(xhr, status, error) {
+                console.log("error, status:", status, " error:", error);
+            }
+        });
+    }
+    function importIt(tableName) {
+        setStatus("");
+        var data = $("#jsonRecords").text();
+        var jsonData = JSON.parse(data);
+        $.ajax({
+            type: 'POST',
+            url: '../php/db-staging.php',
+            data: JSON.stringify({
+                op: "import",
+                table: tableName,
+                data: jsonData
+            }),
+            success: function(data) {
+                setStatus(JSON.stringify(data,null,4));
+            },
+            error: function(xhr, status, error) {
+                setStatus("error, status:" + status + " error:" + error);
+            }
+        });
+    }
+
+    $.getJSON("../php/db-get-table-names.php", function(tables) {
+        for (var i = 0; i < tables.length; i++) {
+            var table = tables[i];
+            $('<option value="' + table + '">' + table + '</option>').appendTo("#tableNames");
+        }
+    });
+
+    $("#exportTable").click(function() {
+        var table = $('#tableNames').find(":selected").text();
+        exportIt(table);
+    });
+
+    $("#importIntoTempDb").click(function() {
+        importIt("tom_tmp_pickup");
+    });
+
     refreshUserList();
 });

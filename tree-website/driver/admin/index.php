@@ -114,7 +114,6 @@ foreach (get_emails() as $weekend => $emails)
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
 
 <script src="../js/admin.js"></script>
-<script src="../js/staging.js"></script>
 </body>
 </html>
 

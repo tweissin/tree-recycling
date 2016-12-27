@@ -61,6 +61,7 @@ function import_from_csv($table_name, $data) {
         );
 
     $current_rows = get_rows($table_name);
+    $records_imported = 0;
 
     for ($i=0; $i<count($data); $i++) {
         $data_for_import = $data[$i];
@@ -107,10 +108,12 @@ function import_from_csv($table_name, $data) {
             mysqli_query($link,"ROLLBACK");
             print_r ($last_err);
             error_exit("failed to insert: " . $last_err["message"],1024);
-            return;
+            return array();
         }
+        $records_imported++;
     }
     mysqli_query($link,"COMMIT");
+    return array("records_imported" => $records_imported);
 }
 
 $str_json = file_get_contents('php://input');
@@ -121,6 +124,8 @@ if (isset($array["op"])) {
         export_to_csv($array["table"]);
     }
     if ($array["op"]=="import") {
-        import_from_csv($array["table"], $array["data"]);
+        header('Content-Type: application/json; charset=UTF-8');
+        $response = import_from_csv($array["table"], $array["data"]);
+        print json_encode($response);
     }
 }
