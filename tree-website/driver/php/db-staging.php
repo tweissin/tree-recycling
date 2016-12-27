@@ -39,6 +39,7 @@ function import_from_csv($table_name, $data) {
     mysqli_query($link, "BEGIN");
 
     $schema = array(
+        "id"=>"number",
         "temp"=>"text",
         "route"=>"text",
         "lat"=>"text",
