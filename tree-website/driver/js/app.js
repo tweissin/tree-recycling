@@ -5,6 +5,7 @@ $(document).ready(function() {
     var detailsTemplate = Handlebars.compile($("#details-template").html());
     const UI_ID=0, UI_NAME=1, UI_STREET=2, UI_NOTES=3, UI_STATUS=4, UI_ZONE=5, UI_ROUTE_ORDER=6, UI_WEEKEND=7, UI_DRIVER=8, UI_EMAIL=9, UI_PHONE=10, UI_ADDRESS=11;
     var dataTable;
+    var NO_SELECTION = "----";
 
     function getZones(data) {
         var zones = [];
@@ -21,7 +22,7 @@ $(document).ready(function() {
 
     function filter(val, colNum) {
         var searchString;
-        if (val=="----") {
+        if (val==NO_SELECTION) {
             searchString = "";
         } else {
             searchString = '^' + val + "$";
@@ -118,7 +119,24 @@ $(document).ready(function() {
                 { "data": "status" },
                 { "data": "zone" },
                 { "data": "route_order" },
-                { "data": "weekend" },
+                {
+                    "data": "weekend",
+                    "render": function(data, type, row) {
+                        var date = data;
+                        switch(data) {
+                            case "date_0":
+                                date = "2017-01-07";
+                                break;
+                            case "date_1":
+                                date = "2017-01-14";
+                                break;
+                            case "date_2":
+                                date = "2017-01-21";
+                                break;
+                        }
+                        return date;
+                    }
+                },
                 { "data": "driver" },
                 { "data": "email" },
                 { "data": "phone" },

@@ -120,7 +120,7 @@ if (!isset($_SESSION['valid']))
 
     <script id="date-template" type="text/x-handlebars-template">
       {{#each date}}
-      <option value="{{date_num}}">{{cal_date}}</option>
+      <option value="{{cal_date}}">{{cal_date}}</option>
       {{/each}}
     </script>
 
