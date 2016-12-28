@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for SwingSet2 Demo Application -->
+<jnlp
+        spec="6.0+"
+        codebase="http://trees.troop4hopkinton.org/driver/admin"
+        href="app.jnlp">
+    <information>
+        <title>Tree Route Creator</title>
+        <vendor>Tom Weissinger</vendor>
+        <homepage href="docs/help.html"/>
+        <description>Creates tree recycling routes</description>
+        <description kind="short">A demo of the capabilities
+            of the Swing Graphical User Interface.</description>
+        <icon href="images/swingset2.jpg"/>
+        <icon kind="splash" href="images/splash.gif"/>
+        <offline-allowed/>
+        <association mime-type="application-x/swingset2-file"  extensions="swingset2"/>
+        <shortcut online="false" install="false">
+            <desktop/>
+            <menu submenu="My Corporation Apps"/>
+        </shortcut>
+    </information>
+    <information os="linux">
+        <title> Tree Route Creator </title>
+        <homepage href="docs/linuxhelp.html"/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.8+" java-vm-args="-esa -Xnoclassgc"/>
+        <jar href="tree-helper.jar"/>
+    </resources>
+    <application-desc main-class="com.trw.TreeRouteCreator"/>
+</jnlp>
