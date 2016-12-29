@@ -57,7 +57,6 @@
     <h1>Tree Route Creator</h1>
     Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
-
     <?php
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
@@ -106,6 +105,11 @@ foreach (get_emails() as $weekend => $emails)
     echo "</span>";
 }
 ?>
+
+    <h1>Requests By Date</h1>
+    <table class="table" id="requestsByDate" border="1"></table>
+
+
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>

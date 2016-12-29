@@ -107,6 +107,23 @@ $(document).ready(function() {
         }
     });
 
+    $.getJSON("../php/log-get.php", function(rows) {
+        var table = $("#requestsByDate");
+        var requestsByDate = rows.reduce(function (allDates, row) {
+            var date = row[0];
+            if (date in allDates) {
+                allDates[date]++;
+            } else {
+                allDates[date] = 1;
+            }
+            return allDates;
+        }, {});
+        for (var key in requestsByDate) {
+            var val = requestsByDate[key];
+            $('<tr><td>' + key + '</td><td>' + val + '</td></tr>').appendTo(table);
+        }
+    });
+
     $("#exportTable").click(function() {
         var table = $('#tableNames').find(":selected").text();
         exportIt(table);
