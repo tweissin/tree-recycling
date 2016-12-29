@@ -91,9 +91,10 @@ public class TreeRouteCreatorUI extends JDialog {
             return;
         }
         final Component parent = this;
+        final int we = weekend;
         new Thread(() -> {
             try {
-                new TreeRouteCreator().updateRoutes(1);
+                new TreeRouteCreator().updateRoutes(we);
             } catch (Exception e) {
                 logger.error("Problem updating routes (check log): " + e.getMessage());
                 JOptionPane.showMessageDialog(parent, "Problem updating routes (check log): " + e.getMessage());
