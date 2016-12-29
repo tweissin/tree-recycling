@@ -3,7 +3,7 @@
 <jnlp
         spec="6.0+"
         codebase="http://trees.troop4hopkinton.org/driver/admin"
-        href="app.jnlp">
+        href="tree-route-creator.jnlp">
     <information>
         <title>Tree Route Creator</title>
         <vendor>Tom Weissinger</vendor>

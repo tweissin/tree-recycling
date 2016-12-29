@@ -55,7 +55,7 @@
     </div>
 
     <h1>Tree Route Creator</h1>
-    Click <a href="app.jnlp">here to launch the Tree Route Creator</a>
+    Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
 
     <?php
