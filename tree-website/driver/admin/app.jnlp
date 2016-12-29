@@ -31,5 +31,5 @@
         <j2se version="1.8+" java-vm-args="-esa -Xnoclassgc"/>
         <jar href="tree-helper.jar"/>
     </resources>
-    <application-desc main-class="com.trw.TreeRouteCreator"/>
+    <application-desc main-class="com.trw.TreeRouteCreatorUI"/>
 </jnlp>

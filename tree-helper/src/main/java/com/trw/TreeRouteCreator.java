@@ -31,7 +31,7 @@ public class TreeRouteCreator {
         File file = new File(Environment.ZONE_SPREADSHEET_FILE);
 
         if (!file.exists()) {
-            throw new RuntimeException("File " + Environment.ZONE_SPREADSHEET_FILE + " does not exist. Create it in your home directory.");
+            throw new RuntimeException("File " + Environment.ZONE_SPREADSHEET_FILE + " does not exist.");
         }
 
         // Make REST call to get all existing addresses

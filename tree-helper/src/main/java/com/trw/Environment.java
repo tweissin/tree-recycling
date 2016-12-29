@@ -10,17 +10,22 @@ import java.util.Properties;
  * Created by tweissin on 11/22/16.
  */
 public class Environment {
-    public static final String GOOGLE_MAPS_API_KEY;
-    public static final String DRIVER_USERNAME;
-    public static final String DRIVER_PASSWORD;
-    public static final String HOST;
-    public static final String STARTING_POINT;
-    public static final String TOWN_LOWERCASE;
-    public static final String TOWN_AND_STATE;
-    public static final String ZONE_SPREADSHEET_FILE;
-    public static File propertiesFilename = new File(System.getProperty("user.dir") + "/tree-helper.properties");
+    public static String GOOGLE_MAPS_API_KEY;
+    public static String DRIVER_USERNAME;
+    public static String DRIVER_PASSWORD;
+    public static String HOST;
+    public static String STARTING_POINT;
+    public static String TOWN_LOWERCASE;
+    public static String TOWN_AND_STATE;
+    public static String ZONE_SPREADSHEET_FILE;
+    private static File propertiesFilename = new File(System.getProperty("user.dir") + "/tree-helper.properties");
 
     static {
+        setPropertiesFilename(new File(System.getProperty("user.dir") + "/tree-helper.properties"));
+    }
+
+    public static void setPropertiesFilename(File filename) {
+        propertiesFilename = filename;
         Properties props = getProperties();
         GOOGLE_MAPS_API_KEY = props.getProperty("google.maps.api.key");
         DRIVER_USERNAME = props.getProperty("driver.username");
