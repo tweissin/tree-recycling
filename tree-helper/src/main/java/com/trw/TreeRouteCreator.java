@@ -27,8 +27,12 @@ public class TreeRouteCreator {
         new TreeRouteCreator().updateRoutes(1);
     }
 
-    private void updateRoutes(int weekend) throws IOException, InvalidFormatException {
+    void updateRoutes(int weekend) throws IOException, InvalidFormatException {
         File file = new File(Environment.ZONE_SPREADSHEET_FILE);
+
+        if (!file.exists()) {
+            throw new RuntimeException("File " + Environment.ZONE_SPREADSHEET_FILE + " does not exist. Create it in your home directory.");
+        }
 
         // Make REST call to get all existing addresses
         Map<Integer, Map<String, String>> pickupInfos = RestUtils.getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, weekend);
@@ -63,11 +67,7 @@ public class TreeRouteCreator {
         Map<String,List<Map<String, String>>> zoneToPickupInfos = new HashMap<>();
         pickupInfos.values().forEach(pickupInfo -> {
             String zone = pickupInfo.get("zone");
-            List<Map<String, String>> pickupInfoList = zoneToPickupInfos.get(zone);
-            if (pickupInfoList==null) {
-                pickupInfoList = new ArrayList<>();
-                zoneToPickupInfos.put(zone, pickupInfoList);
-            }
+            List<Map<String, String>> pickupInfoList = zoneToPickupInfos.computeIfAbsent(zone, k -> new ArrayList<>());
             pickupInfoList.add(pickupInfo);
         });
         zoneToPickupInfos.forEach((zone,pickupInfoList) -> {

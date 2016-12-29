@@ -54,6 +54,9 @@
         <textarea class="form-control" rows="50" id="jsonRecords"></textarea>
     </div>
 
+    <h1>Tree Route Creator</h1>
+    Click <a href="app.jnlp">here to launch the Tree Route Creator</a>
+
 
     <?php
 require_once('../config.php');
