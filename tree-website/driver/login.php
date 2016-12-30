@@ -15,6 +15,7 @@ if (isset($_POST['login']) && !empty($_POST['username'])
         header("Location: ${_SESSION['loc']}");
         exit;
     }else {
+        $_SESSION['valid'] = 'false';
         echo 'Wrong username or password';
     }
 }

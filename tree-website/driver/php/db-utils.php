@@ -31,21 +31,34 @@ function is_password_valid( $pass_array, $user, $pass )
  */
 function check_basic_auth_user()
 {
-    echo $_SESSION['valid'];
-    if (isset($_SESSION['valid']) && $_SESSION['valid']==true) {
+    $user = $_SERVER['PHP_AUTH_USER'];
+    $pass = $_SERVER['PHP_AUTH_PW'];
+
+    if (empty($user)) {
+        if (isset($_SESSION['valid']) && $_SESSION['valid'] == 'true') {
+            // we already validated in another session
+            return true;
+        }
+    }
+
+    if (isset($_SERVER['REMOTE_USER'])) {
+        // this is the case for Apache logins
+        // TODO: not the best -- if password changes we still allow it through
+        // -- but will do for now.
         return true;
     }
 
-    $user = $_SERVER['PHP_AUTH_USER'];
-    $pass = $_SERVER['PHP_AUTH_PW'];
     $user_map = get_user_map();
     $valid = is_password_valid($user_map, $user, $pass);
     if (!$valid)
     {
+        // User is invalid
+        $_SESSION['valid'] = 'false';
         header('HTTP/1.0 403 Forbidden');
     }
     else
     {
+        // User credentials are valid
         $_SESSION['valid'] = 'true';
     }
     return $valid;
