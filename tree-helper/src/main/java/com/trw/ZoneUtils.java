@@ -14,7 +14,7 @@ public abstract class ZoneUtils {
 
     public static ZoneUtils getInstance() {
         if (INSTANCE==null) {
-            INSTANCE = new ExcelZoneUtils();
+            INSTANCE = new GoogleSheetsZoneUtils();
         }
         return INSTANCE;
     }

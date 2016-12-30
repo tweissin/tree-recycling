@@ -85,6 +85,62 @@ public class RestUtils {
         }
     }
 
+    public static Map<String,String> getSpreadsheetAsMap(String spreadsheetId, String sheetId) throws IOException {
+        Map<String,String> map = new HashMap<>();
+        Map<String,String> dataMap = getSpreadsheetDataMap(spreadsheetId, sheetId);
+        int currentRow = 2;
+        while(true) {
+            String key = dataMap.get("A" + currentRow);
+            if (key==null) {
+                break;
+            }
+            String value = dataMap.get("B" + currentRow);
+            map.put(key,value);
+            currentRow++;
+        }
+        return map;
+    }
+
+    /**
+     * This returns the spreadsheet data in the form {"A1":"data1", "A2":"data2", "B1":"data3", ...}
+     */
+    private static Map<String,String> getSpreadsheetDataMap(String spreadsheetId, String sheetId) throws IOException {
+        Map<String,String> dataMap = new HashMap<>();
+        String json = getJsonForSpreadsheet(spreadsheetId, sheetId);
+        Map spreadsheet = new Gson().fromJson(json, Map.class);
+        Map feed = (Map)spreadsheet.get("feed");
+        List entries = (List)feed.get("entry");
+        for (Object entry : entries) {
+            Map entryMap = (Map)entry;
+            Map titleMap = (Map) entryMap.get("title");
+            String cell = (String) titleMap.get("$t");
+            Map cellMap = (Map) entryMap.get("gs$cell");
+            String data = (String) cellMap.get("inputValue");
+            dataMap.put(cell,data);
+        }
+        return dataMap;
+    }
+
+    private static String getJsonForSpreadsheet(String spreadsheetId, String sheetId) throws IOException {
+        HttpHost targetHost = new HttpHost("spreadsheets.google.com", PORT, "http");
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet("/feeds/cells/" + spreadsheetId + "/" + sheetId + "/public/full?alt=json");
+        HttpResponse response = httpclient.execute(targetHost, httpGet);
+        return responseAsString(response);
+    }
+
+    private static String responseAsString(HttpResponse response) throws IOException {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+            StringBuilder sb = new StringBuilder("");
+            String line;
+            String NL = System.getProperty("line.separator");
+            while ((line = in.readLine()) != null) {
+                sb.append(line).append(NL);
+            }
+            return sb.toString();
+        }
+    }
+
     private static HttpResponse getHttpResponse(String username, String password, HttpRequest httpRequest) throws IOException {
         HttpHost targetHost = new HttpHost(Environment.HOST, PORT, "http");
 
@@ -109,15 +165,7 @@ public class RestUtils {
     private static String getJson(String username, String password) throws IOException {
         HttpGet httpget = new HttpGet("/driver/php/db-get-pickups.php");
         HttpResponse response = getHttpResponse(username, password, httpget);
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-            StringBuilder sb = new StringBuilder("");
-            String line;
-            String NL = System.getProperty("line.separator");
-            while ((line = in.readLine()) != null) {
-                sb.append(line).append(NL);
-            }
-            return sb.toString();
-        }
+        return responseAsString(response);
     }
 
     private static void putJson(String username, String password, String json) throws IOException {

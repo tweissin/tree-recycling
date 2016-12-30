@@ -5,6 +5,7 @@ starting.point=1234 Main St, Anywhere, MA
 town.lowercase=anywhere
 town.and.state=Anywhere, TXT
 zone.spreadsheet.file=tree-recycling.xlsx
+zone.spreadsheet.id=YOUR_GOOGLE_SPREADSHEET_ID
 
 driver.username=troop4
 driver.password=troop4
