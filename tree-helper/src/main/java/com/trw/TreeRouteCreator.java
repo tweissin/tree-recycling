@@ -97,7 +97,7 @@ public class TreeRouteCreator {
 
     private boolean updateZones(Map<Integer, Map<String, String>> pickupInfos, File file) throws IOException, InvalidFormatException {
         logger.info("updateZones - read from file " + file.getAbsolutePath());
-        Map<String,String> roadZone = ZoneUtils.getRoadToZoneMap(file);
+        Map<String,String> roadZone = ZoneUtils.getInstance().getRoadToZoneMap(file);
         Pattern pattern = Pattern.compile("\\d+ (.*?),.*");
         Pattern patternWithoutStreet = Pattern.compile("(.*?),.*");
         AtomicInteger changes = new AtomicInteger();
@@ -142,7 +142,7 @@ public class TreeRouteCreator {
         logger.info("updatePickupInfos");
         boolean useGoogleApi = false;
         AtomicInteger changes = new AtomicInteger();
-        Map<String,String> addressExceptionMap = ZoneUtils.getAddressExceptionMap(file);
+        Map<String,String> addressExceptionMap = ZoneUtils.getInstance().getAddressExceptionMap(file);
         pickupInfos.forEach((k,pickupInfo)->{
             String addressToLookup = pickupInfo.get("street");
             String fixedAddress = pickupInfo.get("address");
