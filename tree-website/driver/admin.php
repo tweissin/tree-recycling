@@ -41,7 +41,18 @@ if (!isset($_SESSION['valid']))
     <h1>Tree Route Creator</h1>
     Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
+    <h1>Zone Mapping Worksheet</h1>
+    You use the Zone Mapping worksheet to create routes around town.<br>
     <?php
+
+    function get_spreadsheet_url()
+    {
+        // load the URL from the website
+        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/../../url.txt");
+    }
+
+    $url = get_spreadsheet_url();
+    echo "<a href=\"$url\">Zone Mapping Worksheet</a>";
 
 function get_emails()
 {

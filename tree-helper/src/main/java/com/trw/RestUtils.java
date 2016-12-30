@@ -95,7 +95,7 @@ public class RestUtils {
                 break;
             }
             String value = dataMap.get("B" + currentRow);
-            map.put(key,value);
+            map.put(key.toLowerCase(),value.toLowerCase());
             currentRow++;
         }
         return map;
