@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Driver Admin</title>
+    <title>Driver Admin Utilities</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -10,34 +10,6 @@
 </head>
 <body>
 <div class="container">
-
-    <!-- User List -->
-    <h1>User list</h1>
-    <table id="userTable" class="table table-striped">
-        <thead>
-        <tr>
-            <td>Username</td>
-            <td>Select</td>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <button id="delete">Delete checked</button>
-
-    <!-- Add User -->
-    <h1>Add user</h1>
-    <form>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-        </div>
-        <button id="add" type="submit" class="btn btn-default">Add</button>
-    </form>
     <div id="status" style="display: none;"></div>
 
     <!-- Import/Export -->
