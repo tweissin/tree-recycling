@@ -116,7 +116,16 @@ $(document).ready(function() {
                 { "data": "id" },
                 { "data": "name" },
                 { "data": "street" },
-                { "data": "notes" },
+                {
+                    "data": "comments",
+                    "render": function(data, type, row) {
+                        var maxlen = 20;
+                        if (data && data.length>maxlen) {
+                            return data.substring(0,maxlen) + "...";
+                        }
+                        return data;
+                    }
+                },
                 { "data": "status" },
                 { "data": "zone" },
                 { "data": "route_order" },

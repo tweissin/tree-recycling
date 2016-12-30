@@ -126,8 +126,9 @@ if (!isset($_SESSION['valid']))
     </script>
 
     <script id="details-template" type="text/x-handlebars-template">
-      <a href="https://www.google.com/maps/place/{{encodedAddress}}" target="_blank">{{address}}</a> {{email}} {{phone}}<br>
-      Notes: {{notes}}<br>
+      <a href="https://www.google.com/maps/place/{{encodedAddress}}" target="_blank">{{address}}</a><br>
+        {{email}} {{phone}}<br>
+      Notes: {{comments}}<br>
       <button value="pickedUp" type="button" class="btn btn-default pickup-status-btn">Pick Up Complete</button><br>
       <button value="noTree" type="button" class="btn btn-default pickup-status-btn">No Tree</button><br>
       <button value="pickedUpNoMoney" type="button" class="btn btn-default pickup-status-btn">Pick Up No Money</button><p/>

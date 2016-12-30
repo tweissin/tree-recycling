@@ -17,7 +17,7 @@ $desiredFields = array(
     "id",
     "name",
     "street",
-    "notes",
+    "comments",
     "status",
     "zone",
     "route_order",
