@@ -1,8 +1,15 @@
 <?php
-
+/**
+ * This is used to add a user into the DB.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
-require_once(BASEDIR . '/php/password.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 $str_json = file_get_contents('php://input');
 $array = json_decode(json_encode(json_decode($str_json)), true);

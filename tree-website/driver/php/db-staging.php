@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * This is used to export pickup request data to or from CSV.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 function export_to_csv($table_name) {
     $data = get_rows($table_name);

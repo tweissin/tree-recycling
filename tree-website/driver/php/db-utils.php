@@ -1,5 +1,55 @@
 <?php
+/**
+ * This has several various utilities related to the DB.
+ */
 require_once('../config.php');
+require_once(BASEDIR . '/php/password.php');
+
+function get_user_map()
+{
+    $users = get_rows("user");
+    $res = Array();
+    foreach($users as $u)
+    {
+        $user = $u["username"];
+        $pass = $u["password"];
+        $res[$user] = $pass;
+    }
+    return $res;
+}
+
+function is_password_valid( $pass_array, $user, $pass )
+{
+    if (!isset($pass_array[$user]))
+        return False;
+    $crypted = $pass_array[$user];
+    return ($crypted == password_verify($pass,$crypted));
+}
+
+/**
+ * This checks the user coming in from Basic auth.
+ */
+function check_basic_auth_user()
+{
+    echo $_SESSION['valid'];
+    if (isset($_SESSION['valid']) && $_SESSION['valid']==true) {
+        return true;
+    }
+
+    $user = $_SERVER['PHP_AUTH_USER'];
+    $pass = $_SERVER['PHP_AUTH_PW'];
+    $user_map = get_user_map();
+    $valid = is_password_valid($user_map, $user, $pass);
+    if (!$valid)
+    {
+        header('HTTP/1.0 403 Forbidden');
+    }
+    else
+    {
+        $_SESSION['valid'] = 'true';
+    }
+    return $valid;
+}
 
 function get_rows($table_name, $datatables=false, $desiredFields=null, $where_clause=null)
 {

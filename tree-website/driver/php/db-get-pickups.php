@@ -1,6 +1,15 @@
 <?php
+/**
+ * This is used to get a list of pickup requests.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 header("Content-Type: application/json");
 

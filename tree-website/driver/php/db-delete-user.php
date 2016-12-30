@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * THis is used to delete a user from the DB.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] != 'DELETE') {
     error_exit("this only handles DELETE requests", 5001);

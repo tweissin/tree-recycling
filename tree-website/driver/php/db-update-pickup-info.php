@@ -1,7 +1,20 @@
 <?php
-
+/**
+ * This is used by the Tree Route Creator to update the
+ * actual address, the zone, and the route order for a given
+ * tree request.
+ *
+ * The address given by the tree pickup requester may be badly
+ * formed so that's why we update it.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 function execute_update($set, $id) {
     $result = mysql_query("UPDATE tom_tmp_pickup SET " . $set . " where id=" . $id);

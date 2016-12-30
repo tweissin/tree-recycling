@@ -1,35 +1,13 @@
 <?php
 session_start();
 require_once('config.php');
-require_once(BASEDIR . '/php/password.php');
 require_once(BASEDIR . '/php/db-utils.php');
 
-function load_htpasswd()
-{
-    $users = get_rows("user");
-    $res = Array();
-    foreach($users as $u)
-    {
-        $user = $u["username"];
-        $pass = $u["password"];
-        $res[$user] = $pass;
-    }
-    return $res;
-}
-
-function test_htpasswd( $pass_array, $user, $pass )
-{
-    if (!isset($pass_array[$user]))
-        return False;
-    $crypted = $pass_array[$user];
-    return ($crypted == password_verify($pass,$crypted));
-}
-
-$pass_array = load_htpasswd();
+$user_map = get_user_map();
 if (isset($_POST['login']) && !empty($_POST['username'])
     && !empty($_POST['password'])) {
 
-    if (test_htpasswd($pass_array, $_POST['username'], $_POST['password'])) {
+    if (is_password_valid($user_map, $_POST['username'], $_POST['password'])) {
         $_SESSION['valid'] = 'true';
         $_SESSION['timeout'] = time();
         $_SESSION['username'] = $_POST['username'];

@@ -1,7 +1,16 @@
 <?php
-
+/**
+ * This is used by the Driver webapp to update the current
+ * state of the tree pickup.
+ */
+session_start();
 require_once('../config.php');
 require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 function update_pickup_state($id, $status, $driver)
 {

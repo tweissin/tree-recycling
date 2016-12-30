@@ -1,14 +1,22 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: tweissin
- * Date: 12/29/16
- * Time: 12:21 AM
+ * This retrieves data from the log file which is updated
+ * when people make tree pickup requests on the website.
  */
+session_start();
 require_once('../config.php');
+require_once(BASEDIR . '/php/db-utils.php');
+
+if (!check_basic_auth_user())
+{
+    exit();
+}
 
 $log_filename = BASEDIR . "/../log.txt.bak";
 
+/**
+ * Make a backup in case the actual file is in use.
+ */
 function make_backup()
 {
     global $log_filename;
