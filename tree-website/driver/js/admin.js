@@ -57,6 +57,32 @@ $(document).ready(function() {
         }
     });
 
+    $.getJSON("php/db-get-pickups.php", function(data) {
+        var table = $("#requestsByZone tbody");
+        var requestsByZone = data.reduce(function (acc, row) {
+            var weekend;
+            if (row.weekend in acc) {
+                weekend = acc[row.weekend];
+            } else {
+                weekend = {};
+                acc[row.weekend] = weekend;
+            }
+            if (row.zone in weekend) {
+                weekend[row.zone]++;
+            } else {
+                weekend[row.zone] = 1;
+            }
+            return acc;
+        }, {});
+        for (var weekend in requestsByZone) {
+            var requests = requestsByZone[weekend];
+            for (var zone in requests) {
+                var count = requests[zone];
+                $('<tr><td>' + weekend + '</td><td>' + zone + '</td><td>' + count + '</td></tr>').appendTo(table);
+            }
+        }
+    });
+
     $.getJSON("php/log-get.php", function(rows) {
         var table = $("#requestsByDate");
         var requestsByDate = rows.reduce(function (allDates, row) {

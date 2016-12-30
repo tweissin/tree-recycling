@@ -99,6 +99,17 @@ foreach (get_emails() as $weekend => $emails)
 }
 ?>
 
+    <h1>Requests By Zone</h1>
+    If too many or too few requests in a particular zone, you may want to rebalance.<br>
+    <b>Note:</b> There is a hard limit of 23 requests in any one zone due to limitations with Google maps.
+
+    <table class="table table-striped" id="requestsByZone" border="1">
+        <thead>
+        <tr><td>Weekend</td><td>Zone</td><td>Count</td></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
     <h1>Requests By Date</h1>
     <table class="table" id="requestsByDate" border="1"></table>
 
