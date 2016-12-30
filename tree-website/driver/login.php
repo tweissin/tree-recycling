@@ -34,7 +34,7 @@ if (isset($_POST['login']) && !empty($_POST['username'])
         $_SESSION['timeout'] = time();
         $_SESSION['username'] = $_POST['username'];
 
-        header("Location: index.php");
+        header("Location: ${_SESSION['loc']}");
         exit;
     }else {
         echo 'Wrong username or password';

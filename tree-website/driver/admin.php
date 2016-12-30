@@ -1,3 +1,15 @@
+<?php
+session_start();
+require_once('config.php');
+require_once(BASEDIR . '/php/db-utils.php');
+
+if (!isset($_SESSION['valid']))
+{
+    header("Location: login.php");
+    $_SESSION['loc']=$_SERVER['PHP_SELF'];
+    exit;
+}
+?>
 <html>
 <head>
     <title>Driver Admin Utilities</title>
@@ -30,8 +42,6 @@
     Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
     <?php
-require_once('config.php');
-require_once(BASEDIR . '/php/db-utils.php');
 
 function get_emails()
 {

@@ -5,8 +5,9 @@ require_once('config.php');
 //unset($_SESSION['valid']);
 if (!isset($_SESSION['valid']))
 {
-  header("Location: login.php");
-  exit;
+    header("Location: login.php");
+    $_SESSION['loc']=$_SERVER['PHP_SELF'];
+    exit;
 }
 ?>
 
