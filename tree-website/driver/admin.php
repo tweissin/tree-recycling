@@ -120,7 +120,7 @@ foreach (get_emails() as $weekend => $emails)
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
 
-<script src="../js/admin.js"></script>
+<script src="js/admin.js"></script>
 </body>
 </html>
 
