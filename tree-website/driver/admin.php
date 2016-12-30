@@ -58,7 +58,7 @@
     Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
     <?php
-require_once('../config.php');
+require_once('config.php');
 require_once(BASEDIR . '/php/db-utils.php');
 
 function get_emails()

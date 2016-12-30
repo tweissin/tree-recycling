@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('#userTable').find('input[type="checkbox"]:checked').each(function () {
             var username = $(this).parent().parent().find("td").first().text();
             $.ajax({
-                url: '../php/db-delete-user.php?username=' + username,
+                url: 'php/db-delete-user.php?username=' + username,
                 type: 'DELETE',
                 success: function(result) {
                     var msg = $("#status").text();
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     function refreshUserList() {
         $("tbody").empty();
-        $.getJSON("../php/db-get-users.php", function(users) {
+        $.getJSON("php/db-get-users.php", function(users) {
             for (var i=0; i<users.length; i++) {
                 var user = users[i];
                 $("tbody").append('<tr><td>' + user.username + '</td><td><input type="checkbox"></td></tr>');
@@ -46,7 +46,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: '../php/db-add-user.php',
+            url: 'php/db-add-user.php',
             data: JSON.stringify({
                 "username":username,
                 "password":password
@@ -65,7 +65,7 @@ $(document).ready(function() {
         setStatus("");
         $.ajax({
             type: 'POST',
-            url: '../php/db-staging.php',
+            url: 'php/db-staging.php',
             data: JSON.stringify({
                 op: "export",
                 table: tableName
@@ -85,7 +85,7 @@ $(document).ready(function() {
         var jsonData = JSON.parse(data);
         $.ajax({
             type: 'POST',
-            url: '../php/db-staging.php',
+            url: 'php/db-staging.php',
             data: JSON.stringify({
                 op: "import",
                 table: tableName,
@@ -100,14 +100,19 @@ $(document).ready(function() {
         });
     }
 
-    $.getJSON("../php/db-get-table-names.php", function(tables) {
+    $.getJSON("php/db-get-table-names.php", function(tables) {
+        // put tmp_pickup first
+        var tmp_pickup = 'tmp_pickup';
+        $('<option value="' + tmp_pickup + '">' + tmp_pickup + '</option>').appendTo("#tableNames");
+
         for (var i = 0; i < tables.length; i++) {
             var table = tables[i];
+            if (table==tmp_pickup) continue;
             $('<option value="' + table + '">' + table + '</option>').appendTo("#tableNames");
         }
     });
 
-    $.getJSON("../php/log-get.php", function(rows) {
+    $.getJSON("php/log-get.php", function(rows) {
         var table = $("#requestsByDate");
         var requestsByDate = rows.reduce(function (allDates, row) {
             var date = row[0];
