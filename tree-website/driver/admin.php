@@ -99,6 +99,35 @@ foreach (get_emails() as $weekend => $emails)
 }
 ?>
 
+    <h1>Requests with comments</h1>
+    The following are all requests that had comments.  This may be useful for feedback,
+    like if money was removed but the tree was not taken, or if the tree was never picked up.<br>
+
+    <table class="table table-striped" id="customerComments" border="1">
+        <thead>
+        <tr><td>Name</td><td>Email</td><td>Comment</td></tr>
+        </thead>
+        <tbody>
+
+    <?php
+    /**
+     * Get requests with customer comments.
+     */
+    function print_customer_comments() {
+        foreach (get_rows("tmp_pickup") as $pickup)
+        {
+            if (strlen($pickup["comments"])>0) {
+                $email = $pickup["email"];
+                echo "<tr><td>${pickup["name"]}</td><td><a href='mailto:$email'>$email</a></td><td>${pickup["comments"]}</td></tr>";
+            }
+        }
+    }
+    print_customer_comments();
+
+    ?>
+        </tbody>
+    </table>
+
     <h1>Requests By Zone</h1>
     If too many or too few requests in a particular zone, you may want to rebalance.<br>
     <b>Note:</b> There is a hard limit of 23 requests in any one zone due to limitations with Google maps.
