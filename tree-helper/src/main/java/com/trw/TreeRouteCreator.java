@@ -29,6 +29,8 @@ public class TreeRouteCreator {
     }
 
     void updateRoutes(int weekend) throws IOException, InvalidFormatException {
+        logger.info("Tree Route Creator V1.2");
+
         // Make REST call to get all existing addresses
         Map<Integer, Map<String, String>> pickupInfos = RestUtils.getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, weekend);
 
