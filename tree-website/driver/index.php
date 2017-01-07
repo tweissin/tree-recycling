@@ -126,7 +126,7 @@ if (!isset($_SESSION['valid']))
     </script>
 
     <script id="details-template" type="text/x-handlebars-template">
-      <a href="https://www.google.com/maps/place/{{encodedAddress}}" target="_blank">{{address}}</a><br>
+      <a href="https://maps.google.com/maps/place/{{encodedAddress}}" target="_blank">{{address}}</a><br>
         {{email}} {{phone}}<br>
       Notes: {{comments}}<br>
       <button value="pickedUp" type="button" class="btn btn-default pickup-status-btn">Pick Up Complete</button><br>

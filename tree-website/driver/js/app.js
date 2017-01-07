@@ -57,6 +57,7 @@ $(document).ready(function() {
         $("#example tr").click(function() {
             var id = $(this).find("td").first().text();
             var data = getDataForId(id);
+            data.encodedAddress = encodeURIComponent(data.address);
             var detailsHtml = detailsTemplate(data);
             var driver = $("#driver");
             var saveStatus = $("#saveStatus");
