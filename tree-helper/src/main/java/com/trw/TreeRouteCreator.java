@@ -24,7 +24,7 @@ public class TreeRouteCreator {
     private static final Logger logger = LoggerFactory.getLogger(TreeRouteCreator.class);
 
     public static void main(String ... args) throws IOException, InvalidFormatException {
-        new TreeRouteCreator().updateRoutes(1);
+        new TreeRouteCreator().updateRoutes(2);
     }
 
     void updateRoutes(int weekend) throws IOException, InvalidFormatException {
@@ -92,27 +92,34 @@ public class TreeRouteCreator {
                 pickupInfo.put("route_order",String.valueOf(i));
                 RestUtils.updatePickupInfo(Environment.DRIVER_USERNAME,Environment.DRIVER_PASSWORD,id,null,null, i);
             }
+
+            // TODO: handle case where optimalRoute list size is different from addresses (+2) list size
+            // For instance: 37 Trevor Lane and 16 Trevor Lane
         });
     }
 
     private boolean updateZones(Map<Integer, Map<String, String>> pickupInfos, File file) throws IOException, InvalidFormatException {
         logger.info("updateZones - read from file " + file.getAbsolutePath());
-        Map<String,String> roadZone = ZoneUtils.getInstance().getRoadToZoneMap(file);
-        Pattern pattern = Pattern.compile("\\d+ (.*?),.*");
+        Map<String, List<RestUtils.ZoneAndRange>> roadZone = ZoneUtils.getInstance().getRoadToZoneMap(file);
+        Pattern pattern = Pattern.compile("(\\d+) (.*?),.*");
         Pattern patternWithoutStreet = Pattern.compile("(.*?),.*");
         AtomicInteger changes = new AtomicInteger();
 
         pickupInfos.forEach((k,pickupInfo)->{
+            String streetNumber;
             String streetName;
             String actualAddress = pickupInfo.get("address");
             String currentZone = pickupInfo.get("zone");
             logger.debug("actualAddress: " + actualAddress);
             Matcher matcher = pattern.matcher(actualAddress);
             if (matcher.find()) {
-                streetName = matcher.group(1);
+                streetNumber = matcher.group(1);
+                streetName = matcher.group(2);
             } else {
+                // TODO: when is this used again??
                 matcher = patternWithoutStreet.matcher(actualAddress);
                 if (matcher.find()) {
+                    streetNumber = null;
                     streetName = matcher.group(1);
                 } else {
                     throw new RuntimeException("couldn't get street name from " + actualAddress);
@@ -124,9 +131,24 @@ public class TreeRouteCreator {
                 streetName = streetName.substring(0, poundPos-1);
             }
 
-            String zone = roadZone.get(streetName.toLowerCase());
-            if (zone == null) {
+            List<RestUtils.ZoneAndRange> zoneAndRanges = roadZone.get(streetName.toLowerCase());
+            if (zoneAndRanges == null) {
                 throw new RuntimeException("unknown zone for " + streetName + "; add it to the zone-mapping worksheet.");
+            }
+
+            String zone = null;
+            if (streetNumber==null) {
+                logger.warn("??? no street number discovered by Google Maps for '" + pickupInfo.get("street") + "'");
+            }
+            for (RestUtils.ZoneAndRange zoneAndRange : zoneAndRanges) {
+                if (zoneAndRange.isInRange(streetNumber)) {
+                    zone = zoneAndRange.getZone();
+                    break;
+                }
+            }
+
+            if (zone==null) {
+                throw new RuntimeException("couldn't find zone mapping for " + actualAddress + ".  Check start and end street ranges in zone-mapping worksheet, or leave them blank");
             }
 
             if (!StringUtils.equals(currentZone,zone)) {

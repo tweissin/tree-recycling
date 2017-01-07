@@ -4,6 +4,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,12 +12,13 @@ import java.util.Map;
  */
 public class GoogleSheetsZoneUtils extends ZoneUtils {
     public static void main(String [] args) throws IOException, InvalidFormatException {
-        ZoneUtils.getInstance().getRoadToZoneMap(null);
+        Map<String, List<RestUtils.ZoneAndRange>> roadToZoneMap = ZoneUtils.getInstance().getRoadToZoneMap(null);
+        System.out.println(roadToZoneMap);
     }
 
     @Override
-    Map<String, String> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException {
-        Map<String, String> map = RestUtils.getSpreadsheetAsMap(Environment.ZONE_SPREADSHEET_ID, "1");
+    Map<String, List<RestUtils.ZoneAndRange>> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException {
+        Map<String,List<RestUtils.ZoneAndRange>> map = RestUtils.getZoneMapping(Environment.ZONE_SPREADSHEET_ID, "1");
         return map;
     }
 

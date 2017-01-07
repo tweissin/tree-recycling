@@ -17,15 +17,19 @@ public class GoogleRouteCollector {
     private GeoApiContext context;
     public static void main(String ... args) throws Exception {
         GoogleRouteCollector routeCollector = new GoogleRouteCollector();
-        List<String> addresses = Arrays.asList("San Jose, CA","Miami, FL","Anchorage, AK","New York, NY");
-        List<String> optimalAddresses = routeCollector.getOptimalRoute(
-                Environment.STARTING_POINT,
-                addresses,
-                Environment.STARTING_POINT);
-        for (String address : optimalAddresses) {
-            System.out.println(address);
+        if (true) {
+            String addr = routeCollector.getAddress("1000 Foo Rd Hopkinton MA");
+            System.out.println(addr);
+        } else {
+            List<String> addresses = Arrays.asList("San Jose, CA","Miami, FL","Anchorage, AK","New York, NY");
+            List<String> optimalAddresses = routeCollector.getOptimalRoute(
+                    Environment.STARTING_POINT,
+                    addresses,
+                    Environment.STARTING_POINT);
+            for (String address : optimalAddresses) {
+                System.out.println(address);
+            }
         }
-
     }
 
     public GoogleRouteCollector() {
@@ -60,6 +64,9 @@ public class GoogleRouteCollector {
                     address).await();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+        if (results.length!=1) {
+            throw new RuntimeException("couldn't find address " + address + "; add to address-exception worksheet");
         }
         return results[0].formattedAddress;
     }

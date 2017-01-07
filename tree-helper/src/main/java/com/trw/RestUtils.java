@@ -2,6 +2,9 @@ package com.trw;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -22,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +38,12 @@ public class RestUtils {
     private static final Logger logger = LoggerFactory.getLogger(RestUtils.class);
 
     public static void main(String ... args) throws IOException {
-        System.out.println(getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, 1));
+        if (true) {
+            Map<String, List<ZoneAndRange>> zoneMapping = RestUtils.getZoneMapping("1bR9lY3-HFW1lJZhMZW-axDHVPxgD3Rn5f5GjCQhSMaU", "1");
+            System.out.println(zoneMapping);
+        } else {
+            System.out.println(getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, 1));
+        }
     }
 
     /**
@@ -99,6 +108,106 @@ public class RestUtils {
             currentRow++;
         }
         return map;
+    }
+
+    public static Map<String,List<ZoneAndRange>> getZoneMapping(String spreadsheetId, String sheetId) throws IOException {
+        Map<String,List<ZoneAndRange>> map = new HashMap<>();
+        Map<String,String> dataMap = getSpreadsheetDataMap(spreadsheetId, sheetId);
+        int currentRow = 2;
+        while(true) {
+            String street = dataMap.get("A" + currentRow);
+            if (street==null) {
+                break;
+            }
+            String zone = dataMap.get("B" + currentRow);
+            String startStr = dataMap.get("C" + currentRow);
+            String endStr = dataMap.get("D" + currentRow);
+            Integer start = null;
+            Integer end = null;
+            if (startStr!=null) {
+                try {
+                    start = Integer.parseInt(startStr);
+                } catch (NumberFormatException ignore) {
+                    throw new RuntimeException("invalid start number " + startStr + " for " + street);
+                }
+            }
+            if (endStr!=null) {
+                try {
+                    end = Integer.parseInt(endStr);
+                } catch (NumberFormatException ignore) {
+                    throw new RuntimeException("invalid end number " + startStr + " for " + street);
+                }
+            }
+            if (start!=null && end!=null && start > end) {
+                throw new RuntimeException("start street cannot be greater than end street for " + street);
+            }
+            ZoneAndRange zoneAndRange = new ZoneAndRange(zone, start, end);
+            List<ZoneAndRange> zoneAndRanges = map.computeIfAbsent(street.toLowerCase(), k -> new ArrayList<>());
+            if (zoneAndRanges.size()>0) {
+                // before we add a new one, ensure we set start and end on other ranges
+                for (ZoneAndRange zr : zoneAndRanges) {
+                    if (zr.getStartStreetNum()==null || zr.getEndStreetNum()==null
+                            || zoneAndRange.getStartStreetNum()==null || zoneAndRange.getEndStreetNum()==null) {
+                        throw new RuntimeException("multiple zones mapped to '" + street + "'.  Check zone-mapping worksheet.  Must have street number range defined, or remove the duplicate street mapping");
+                    }
+                    if (StringUtils.equals(zr.getZone(),zone)) {
+                        throw new RuntimeException("zone " + zone + " mapped to '" + street + "' more than once.  Check zone-mapping worksheet");
+                    }
+                }
+            }
+            zoneAndRanges.add(zoneAndRange);
+            currentRow++;
+        }
+        // TODO: validate mapping when multiple zones mapped to a single street and there are overlapping street numbers.
+        return map;
+    }
+
+    public static final class ZoneAndRange {
+        private final String zone;
+
+        public String getZone() {
+            return zone;
+        }
+
+        public Integer getStartStreetNum() {
+            return startStreetNum;
+        }
+
+        public Integer getEndStreetNum() {
+            return endStreetNum;
+        }
+
+        private final Integer startStreetNum;
+        private final Integer endStreetNum;
+
+        ZoneAndRange(String zone, Integer startStreetNum, Integer endStreetNum) {
+
+            this.zone = zone;
+            this.startStreetNum = startStreetNum;
+            this.endStreetNum = endStreetNum;
+        }
+
+        @Override
+        public String toString() {
+            return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        }
+
+        public boolean isInRange(String streetNumber) {
+            if (startStreetNum==null || endStreetNum==null) {
+                // no range defined
+                return true;
+            }
+            if (streetNumber==null) {
+                logger.warn("no street number");
+                return true;
+            }
+            try {
+                int streetNum = Integer.parseInt(streetNumber);
+                return startStreetNum<=streetNum && endStreetNum>=streetNum;
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("expected street number but got " + streetNumber, e);
+            }
+        }
     }
 
     /**

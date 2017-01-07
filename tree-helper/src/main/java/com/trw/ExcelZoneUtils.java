@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ public class ExcelZoneUtils extends ZoneUtils {
     public static void main(String [] args) throws IOException, InvalidFormatException {
         ExcelZoneUtils helper = new ExcelZoneUtils();
         File file = new File(Environment.ZONE_SPREADSHEET_FILE);
-        Map<String, String> roadToZoneMap = getInstance().getRoadToZoneMap(file);
+        Map<String, List<RestUtils.ZoneAndRange>> roadToZoneMap = getInstance().getRoadToZoneMap(file);
         Map<String, String> map = loadMapFromSheet(file, "zone-mapping");
         helper.dumpZones("/street-names.txt", roadToZoneMap);
 
@@ -23,12 +24,12 @@ public class ExcelZoneUtils extends ZoneUtils {
         System.out.println(zoneMetaMap);
     }
 
-    private void dumpZones(String filename, Map<String, String> roadToZoneMap) throws IOException {
+    private void dumpZones(String filename, Map<String, List<RestUtils.ZoneAndRange>> roadToZoneMap) throws IOException {
         InputStream is = ExcelZoneUtils.class.getResourceAsStream(filename);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String road;
         while((road=reader.readLine())!=null) {
-            String zone = roadToZoneMap.get(road.trim());
+            List<RestUtils.ZoneAndRange> zone = roadToZoneMap.get(road.trim());
             if(zone==null) {
                 System.out.println("no mapping for " + road);
                 continue;
@@ -41,8 +42,9 @@ public class ExcelZoneUtils extends ZoneUtils {
      * Used to map an address to a zone.
      */
     @Override
-    public Map<String, String> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException {
-        return loadMapFromSheet(xlsxFile, "zone-mapping");
+    public Map<String, List<RestUtils.ZoneAndRange>> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException {
+//        return loadMapFromSheet(xlsxFile, "zone-mapping");
+        throw new UnsupportedOperationException("getRoadToZoneMap not supported right now");
     }
 
     /**

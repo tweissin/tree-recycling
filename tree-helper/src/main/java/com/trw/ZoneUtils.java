@@ -4,6 +4,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +20,7 @@ public abstract class ZoneUtils {
         return INSTANCE;
     }
 
-    abstract Map<String, String> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException;
+    abstract Map<String, List<RestUtils.ZoneAndRange>> getRoadToZoneMap(File xlsxFile) throws IOException, InvalidFormatException;
 
     abstract Map<String, String> getAddressExceptionMap(File xlsxFile) throws IOException, InvalidFormatException;
 
