@@ -5,8 +5,9 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +29,6 @@ public class TreeRouteCreator {
     }
 
     void updateRoutes(int weekend) throws IOException, InvalidFormatException {
-        File file = new File(Environment.ZONE_SPREADSHEET_FILE);
-
-        if (!file.exists()) {
-            throw new RuntimeException("File " + Environment.ZONE_SPREADSHEET_FILE + " does not exist.");
-        }
-
         // Make REST call to get all existing addresses
         Map<Integer, Map<String, String>> pickupInfos = RestUtils.getPickupInfo(Environment.DRIVER_USERNAME, Environment.DRIVER_PASSWORD, weekend);
 
@@ -43,10 +38,10 @@ public class TreeRouteCreator {
         }
 
         // Fix all addresses locally
-        updatePickupInfos(pickupInfos, file);
+        updatePickupInfos(pickupInfos);
 
         // Map all addresses to a zone
-        updateZones(pickupInfos, file);
+        updateZones(pickupInfos);
 
         // If street address doesn't have a zone, warn user and mark it so in DB
         // If any zone has more than 23, warn user
@@ -89,21 +84,30 @@ public class TreeRouteCreator {
             }
 
             StringBuilder sb = new StringBuilder();
+            StringBuilder url = new StringBuilder("https://www.google.com/maps/dir");
             for (int i=0; i<optimalRoute.size(); i++) {
                 String address = optimalRoute.get(i);
-                sb.append(address).append("\n");
+                sb.append("\n").append(address);
+
+                try {
+                    String encodedAddress = URLEncoder.encode(address, "UTF-8");
+                    encodedAddress = encodedAddress.replace("+","%20");
+                    url.append('/').append(encodedAddress);
+                } catch (UnsupportedEncodingException ignore) {
+                }
                 Map<String, String> pickupInfo = pickupInfoList.stream().filter(p -> p.get("address").equals(address)).findFirst().get();
                 int id = Integer.valueOf(pickupInfo.get("id"));
                 pickupInfo.put("route_order",String.valueOf(i));
                 RestUtils.updatePickupInfo(Environment.DRIVER_USERNAME,Environment.DRIVER_PASSWORD,id,null,null, i);
             }
-            logger.debug("addOptimalRoutes: Optimal route order for Zone " + zone + ":\n" + sb);
+            logger.debug("===============> addOptimalRoutes: Optimal route order for Zone " + zone + ":" + sb
+                    + "\nURL: " + url + "\n");
         });
     }
 
-    private boolean updateZones(Map<Integer, Map<String, String>> pickupInfos, File file) throws IOException, InvalidFormatException {
-        logger.info("updateZones - read from file " + file.getAbsolutePath());
-        Map<String, List<RestUtils.ZoneAndRange>> roadZone = ZoneUtils.getInstance().getRoadToZoneMap(file);
+    private boolean updateZones(Map<Integer, Map<String, String>> pickupInfos) throws IOException, InvalidFormatException {
+        logger.info("updateZones" );
+        Map<String, List<RestUtils.ZoneAndRange>> roadZone = ZoneUtils.getInstance().getRoadToZoneMap();
         Pattern pattern = Pattern.compile("(\\d+) (.*?),.*");
         Pattern patternWithoutStreet = Pattern.compile("(.*?),.*");
         AtomicInteger changes = new AtomicInteger();
@@ -163,11 +167,11 @@ public class TreeRouteCreator {
         return changes.get()>0;
     }
 
-    private boolean updatePickupInfos(Map<Integer, Map<String, String>> pickupInfos, File file) throws IOException, InvalidFormatException {
+    private boolean updatePickupInfos(Map<Integer, Map<String, String>> pickupInfos) throws IOException, InvalidFormatException {
         logger.info("updatePickupInfos");
         boolean useGoogleApi = false;
         AtomicInteger changes = new AtomicInteger();
-        Map<String,String> addressExceptionMap = ZoneUtils.getInstance().getAddressExceptionMap(file);
+        Map<String,String> addressExceptionMap = ZoneUtils.getInstance().getAddressExceptionMap();
         pickupInfos.forEach((k,pickupInfo)->{
             String addressToLookup = pickupInfo.get("street");
             String fixedAddress = pickupInfo.get("address");

@@ -17,7 +17,6 @@ public class Environment {
     public static String STARTING_POINT;
     public static String TOWN_LOWERCASE;
     public static String TOWN_AND_STATE;
-    public static String ZONE_SPREADSHEET_FILE;
     public static String ZONE_SPREADSHEET_ID;
     private static File propertiesFilename = new File(System.getProperty("user.dir") + "/tree-helper.properties");
 
@@ -34,7 +33,6 @@ public class Environment {
         STARTING_POINT = props.getProperty("starting.point");
         TOWN_LOWERCASE = props.getProperty("town.lowercase");
         TOWN_AND_STATE = props.getProperty("town.and.state");
-        ZONE_SPREADSHEET_FILE = props.getProperty("zone.spreadsheet.file");
         ZONE_SPREADSHEET_ID = props.getProperty("zone.spreadsheet.id");
         HOST = props.getProperty("host");
     }
