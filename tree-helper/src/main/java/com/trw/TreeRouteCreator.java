@@ -71,9 +71,8 @@ public class TreeRouteCreator {
             pickupInfoList.add(pickupInfo);
         });
         zoneToPickupInfos.forEach((zone,pickupInfoList) -> {
-            logger.debug("addOptimalRoutes: zone " + zone);
             if (pickupInfoList.size()>MAX_ROUTES_PER_ZONE) {
-                logger.error("too many pickups in zone " + zone + ": " + pickupInfoList.size());
+                logger.error("addOptimalRoutes: too many pickups in zone " + zone + ": " + pickupInfoList.size());
                 return;
 //                throw new RuntimeException("too many pickups in zone " + zone + ": " + pickupInfoList.size());
             }
@@ -82,19 +81,23 @@ public class TreeRouteCreator {
                 addresses.add(pickupInfo.get("address"));
             });
 
-            logger.debug("addOptimalRoutes: getOptimalRoute " + addresses);
             List<String> optimalRoute = googleRouteCollector.getOptimalRoute(Environment.STARTING_POINT, addresses, Environment.STARTING_POINT);
 
+            if (optimalRoute.size()!=addresses.size()) {
+                // For instance: 37 Trevor Lane and 16 Trevor Lane
+                logger.warn("addOptimalRoutes: ??? One or more addresses couldn't be accurately found by Google Maps");
+            }
+
+            StringBuilder sb = new StringBuilder();
             for (int i=0; i<optimalRoute.size(); i++) {
                 String address = optimalRoute.get(i);
+                sb.append(address).append("\n");
                 Map<String, String> pickupInfo = pickupInfoList.stream().filter(p -> p.get("address").equals(address)).findFirst().get();
                 int id = Integer.valueOf(pickupInfo.get("id"));
                 pickupInfo.put("route_order",String.valueOf(i));
                 RestUtils.updatePickupInfo(Environment.DRIVER_USERNAME,Environment.DRIVER_PASSWORD,id,null,null, i);
             }
-
-            // TODO: handle case where optimalRoute list size is different from addresses (+2) list size
-            // For instance: 37 Trevor Lane and 16 Trevor Lane
+            logger.debug("addOptimalRoutes: Optimal route order for Zone " + zone + ":\n" + sb);
         });
     }
 
