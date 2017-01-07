@@ -29,7 +29,9 @@
     </security>
     <resources>
         <j2se version="1.8+" java-vm-args="-esa -Xnoclassgc"/>
-        <jar href="tree-helper.jar"/>
+        <jar href="tree-helper.jar" version="1.1"/>
+        <property name="jnlp.versionEnabled"
+                  value="true"/>
     </resources>
     <application-desc main-class="com.trw.TreeRouteCreatorUI"/>
 </jnlp>

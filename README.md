@@ -23,3 +23,15 @@ Then you can attach a debugger to port 8115.
 If you upload a change to the JAR file, you have to delete it from the local cache:
 
 Java Control Panel > General > Temporary Internet Files: View > Tree Route Creator > 'X' to delete it
+
+## To deploy 
+
+Do the following.
+
+    source setenv.sh
+    TREE_HELPER_VERSION=1.1
+    cd tree-helper
+    mvn clean install
+    cp target/tree-helper.jar target/tree-helper__V${TREE_HELPER_VERSION}.jar
+    
+Next copy the JAR to the website. 
