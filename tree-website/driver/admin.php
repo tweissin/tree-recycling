@@ -38,6 +38,9 @@ if (!isset($_SESSION['valid']))
         <textarea class="form-control" rows="50" id="jsonRecords"></textarea>
     </div>
 
+    <h1>Download data as CSV</h1>
+    <a href="download.php">Data as CSV</a>
+
     <h1>Tree Route Creator</h1>
     Click <a href="tree-route-creator.jnlp">here to launch the Tree Route Creator</a>
 
