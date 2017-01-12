@@ -5,6 +5,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,7 +26,12 @@ public class TreeRouteCreator {
     private static final Logger logger = LoggerFactory.getLogger(TreeRouteCreator.class);
 
     public static void main(String ... args) throws IOException, InvalidFormatException {
-        new TreeRouteCreator().updateRoutes(2);
+        try {
+            Environment.setPropertiesFilename(new File(System.getProperty("user.dir") + "/tree-helper.properties"));
+            new TreeRouteCreator().updateRoutes(2);
+        } catch (Throwable t) {
+            logger.error("There was a problem updating routes: " + t.getMessage(), t);
+        }
     }
 
     void updateRoutes(int weekend) throws IOException, InvalidFormatException {

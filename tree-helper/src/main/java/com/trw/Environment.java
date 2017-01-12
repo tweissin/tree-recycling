@@ -20,10 +20,6 @@ public class Environment {
     public static String ZONE_SPREADSHEET_ID;
     private static File propertiesFilename = new File(System.getProperty("user.dir") + "/tree-helper.properties");
 
-    static {
-        setPropertiesFilename(new File(System.getProperty("user.dir") + "/tree-helper.properties"));
-    }
-
     public static void setPropertiesFilename(File filename) {
         propertiesFilename = filename;
         Properties props = getProperties();

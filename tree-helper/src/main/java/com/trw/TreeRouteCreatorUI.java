@@ -33,7 +33,13 @@ public class TreeRouteCreatorUI extends JDialog {
 
         buttonExit.addActionListener(e -> onOK());
 
-        buttonStart.addActionListener(e -> onStart());
+        buttonStart.addActionListener(e -> {
+            try {
+                onStart();
+            } catch (Throwable t) {
+                logger.error("There was a problem when starting to update routes", t);
+            }
+        });
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -63,17 +69,20 @@ public class TreeRouteCreatorUI extends JDialog {
     }
 
     private void onStart() {
+        logger.info("Start button clicked");
         int weekend = -1;
         if (weekend1RadioButton.isSelected()) {
             weekend = 1;
         } else if (weekend2RadioButton.isSelected()) {
             weekend = 2;
         }
+        logger.info("Weekend: " + weekend);
         if (weekend == -1) {
             logger.warn("No weekend selected");
             JOptionPane.showMessageDialog(this, "Select a weekend");
             return;
         }
+        logger.info("Properties file: " + textFieldPropertiesFile.getText());
         if (textFieldPropertiesFile.getText().length() == 0) {
             logger.warn("No properties file selected");
             JOptionPane.showMessageDialog(this, "Must specify properties filename");
@@ -85,15 +94,19 @@ public class TreeRouteCreatorUI extends JDialog {
             JOptionPane.showMessageDialog(this, "File does not exist: " + textFieldPropertiesFile.getText());
             return;
         }
+        logger.info("Properties file exists");
         Environment.setPropertiesFilename(propertiesFile);
+        logger.info("Checking if existing processing already occurring");
         if (!semaphore.tryAcquire()) {
             logger.warn("Must wait for current process to complete");
             return;
         }
+        logger.info("Starting thread to update routes");
         final Component parent = this;
         final int we = weekend;
         new Thread(() -> {
             try {
+                logger.info("Start updating routes now");
                 new TreeRouteCreator().updateRoutes(we);
             } catch (Exception e) {
                 logger.error("Problem updating routes (check log): " + e.getMessage());
