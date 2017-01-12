@@ -184,8 +184,8 @@ public class TreeRouteCreator {
             String addressToLookup = pickupInfo.get("street");
             String fixedAddress = pickupInfo.get("address");
             logger.debug("addressToLookup: " + addressToLookup);
-            if (addressExceptionMap.containsKey(addressToLookup.toLowerCase())) {
-                addressToLookup = addressExceptionMap.get(addressToLookup.toLowerCase());
+            if (addressExceptionMap.containsKey(addressToLookup.toLowerCase().trim())) {
+                addressToLookup = addressExceptionMap.get(addressToLookup.toLowerCase().trim());
             }
             if (!addressToLookup.toLowerCase().contains(Environment.TOWN_LOWERCASE)) {
                 addressToLookup += ", " + Environment.TOWN_AND_STATE;
