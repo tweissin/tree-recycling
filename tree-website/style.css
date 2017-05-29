@@ -1,0 +1,96 @@
+
+body {
+    padding: 0pt;
+    font-family: Verdana;
+    color: black;
+    font-size: 10pt;
+}
+body:visited { color: purple; }
+
+
+a:link img { border: medium none ;
+text-decoration: none;
+}
+
+a:visited img { border: medium none ;
+text-decoration: none;
+}
+
+a:visited { 
+    color: purple;
+}
+a:visited:hover { 
+    color: red;
+}
+
+
+.hiddenControl {visibility:hidden}
+.displayControl {visibility:visible}
+
+.checkoutBarFrom, .checkoutBarTo { font-family: "Gill Sans MT", Verdana, Arial, sans-serif; font-size: 10px; color: #8c8c8c; }
+.checkoutBarCurrent { font-family: "Gill Sans MT", Verdana, Arial, sans-serif; font-size: 10px; color: #000000; }
+
+#map_canvas
+{
+    height: 400px;
+    width: 600px;
+    margin-left: 15px;
+/*    float: right; */
+}
+
+table.address_list
+{
+    margin-left: 10px;
+    width: 700px;
+    font-size: .7em;
+    float: left;
+}
+
+td.address_list
+{
+    font-size:8pt;
+}
+
+table.medium-body
+{
+    font-size:8pt;
+}
+
+td.medium-body
+{
+    font-size:8pt;
+}
+
+
+#footer {
+	font-size: 8pt;
+	text-align: center;
+	color: #505050;
+	padding-top: 10px;
+    padding-bottom: 15px;
+	background-color: #e6f3ff;
+}
+
+#footer a {
+	color:#4679ac;
+	font-weight: bold;
+	text-decoration: none;
+}
+#footer a:hover {
+	color:#4679ac;
+	text-decoration: underline;
+}
+
+.small-body { font-size: 10pt; color: black;}
+
+.left {
+    float: left;
+    margin-top: -5px;
+    text-align: left;
+}
+.right {
+	float: right;
+    margin-top: -5px;
+line-height: 20px;
+	text-align: right;
+}

@@ -4,3 +4,9 @@
 target/
 tree-helper.properties
 ~*.xlsx
+tree-website/config.php
+.htaccess
+.htpasswd
+log.txt
+plog.txt
+
