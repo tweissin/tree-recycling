@@ -5,6 +5,62 @@
 require_once('../config.php');
 require_once(BASEDIR . '/php/password.php');
 
+class PasswordStrategy {
+    function verify_password($passwordFromDb, $passwordFromUser)
+    {
+        return ($passwordFromDb == $passwordFromUser);
+    }
+
+    function make_password($password)
+    {
+        return $password;
+    }
+
+    function is_session_valid_set()
+    {
+        return True;
+    }
+
+    function is_session_valid()
+    {
+        return True;
+    }
+
+    function set_session_valid($state)
+    {
+        // no-op
+    }
+}
+
+class EncryptedPasswordStrategy extends PasswordStrategy {
+    function verify_password($passwordFromDb, $passwordFromUser)
+    {
+        return $passwordFromDb == password_verify($passwordFromUser, $passwordFromDb);
+    }
+
+    function make_password($password)
+    {
+        return password_hash($password,PASSWORD_BCRYPT);
+    }
+
+    function is_session_valid_set()
+    {
+        return isset($_SESSION['valid']);
+    }
+
+    function is_session_valid()
+    {
+        return is_session_valid_set() && $_SESSION['valid'] == 'true';
+    }
+
+    function set_session_valid($state)
+    {
+        $_SESSION['valid'] = $state;
+    }
+}
+
+$passwordStrategy = new PasswordStrategy();
+
 function get_user_map()
 {
     $users = get_rows("user");
@@ -20,10 +76,11 @@ function get_user_map()
 
 function is_password_valid( $pass_array, $user, $pass )
 {
+    global $passwordStrategy;
     if (!isset($pass_array[$user]))
         return False;
-    $crypted = $pass_array[$user];
-    return ($crypted == password_verify($pass,$crypted));
+
+    return $passwordStrategy->verify_password($pass_array[$user], $pass);
 }
 
 /**
@@ -31,11 +88,27 @@ function is_password_valid( $pass_array, $user, $pass )
  */
 function check_basic_auth_user()
 {
-    $user = $_SERVER['PHP_AUTH_USER'];
-    $pass = $_SERVER['PHP_AUTH_PW'];
+    global $passwordStrategy;
+
+    if (isset($_SERVER['PHP_AUTH_USER']))
+    {
+        $user = $_SERVER['PHP_AUTH_USER'];
+    }
+    else
+    {
+        $user = "";
+    }
+    if (isset($_SERVER['PHP_AUTH_PW']))
+    {
+        $pass = $_SERVER['PHP_AUTH_PW'];
+    }
+    else
+    {
+        $pass = "";
+    }
 
     if (empty($user)) {
-        if (isset($_SESSION['valid']) && $_SESSION['valid'] == 'true') {
+        if ($passwordStrategy->is_session_valid()) {
             // we already validated in another session
             return true;
         }
@@ -59,7 +132,7 @@ function check_basic_auth_user()
     else
     {
         // User credentials are valid
-        $_SESSION['valid'] = 'true';
+        $passwordStrategy->set_session_valid(true);
     }
     return $valid;
 }

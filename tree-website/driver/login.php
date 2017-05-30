@@ -8,14 +8,14 @@ if (isset($_POST['login']) && !empty($_POST['username'])
     && !empty($_POST['password'])) {
 
     if (is_password_valid($user_map, $_POST['username'], $_POST['password'])) {
-        $_SESSION['valid'] = 'true';
+        $passwordStrategy->set_session_valid(true);
         $_SESSION['timeout'] = time();
         $_SESSION['username'] = $_POST['username'];
 
         header("Location: ${_SESSION['loc']}");
         exit;
     }else {
-        $_SESSION['valid'] = 'false';
+        $passwordStrategy->set_session_valid(false);
         echo 'Wrong username or password';
     }
 }

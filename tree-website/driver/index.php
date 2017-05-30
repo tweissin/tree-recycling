@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once('config.php');
+require_once(BASEDIR . '/php/db-utils.php');
 
-//unset($_SESSION['valid']);
-if (!isset($_SESSION['valid']))
+if (!$passwordStrategy->is_session_valid())
 {
     header("Location: login.php");
     $_SESSION['loc']=$_SERVER['PHP_SELF'];

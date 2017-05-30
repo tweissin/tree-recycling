@@ -35,6 +35,8 @@ $(document).ready(function() {
                 var user = users[i];
                 $("tbody").append('<tr><td>' + user.username + '</td><td><input type="checkbox"></td></tr>');
             }
+        }).fail(function(xhr, status, error) {
+			setStatus("error: " + xhr.responseJSON.message);
         });
     }
 

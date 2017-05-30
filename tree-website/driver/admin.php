@@ -3,7 +3,7 @@ session_start();
 require_once('config.php');
 require_once(BASEDIR . '/php/db-utils.php');
 
-if (!isset($_SESSION['valid']))
+if (!$passwordStrategy->is_session_valid())
 {
     header("Location: login.php");
     $_SESSION['loc']=$_SERVER['PHP_SELF'];

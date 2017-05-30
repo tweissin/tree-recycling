@@ -23,5 +23,5 @@ for ($i=0; $i<count($rows); $i++) {
     }
 }
 
-$pwd = password_hash($array["password"],PASSWORD_BCRYPT);
+$pwd = $passwordStrategy->make_password($array["password"]);
 exec_prepared_statement("insert into user (username,password) values (?,?)", "ss", array($array["username"], $pwd));
