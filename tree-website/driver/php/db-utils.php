@@ -50,7 +50,7 @@ class EncryptedPasswordStrategy extends PasswordStrategy {
 
     function is_session_valid()
     {
-        return is_session_valid_set() && $_SESSION['valid'] == 'true';
+        return $this->is_session_valid_set() && $_SESSION['valid'] == 'true';
     }
 
     function set_session_valid($state)
