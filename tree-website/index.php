@@ -47,7 +47,11 @@ $closed = $closed_str == "closed";
 
 for( $i = 0; $i < 3; $i++)
 {
-    list( $table_info[$i]['date'], $table_info[$i]['closed']) = split( "/", $dts[$i]);
+    $parts = split( "/", $dts[$i]);
+    $table_info[$i]['date'] = $parts[0];
+    if (array_count_values($parts)==2) {
+        $table_info[$i]['closed'] = $parts[1];
+    }
 }
 fclose( $date_handle);
 

@@ -13,10 +13,14 @@ if (!check_basic_auth_user())
 }
 
 header("Content-Type: application/json");
-$rows = get_rows("information_schema.tables", false, null, "table_schema='trees' and `TABLE_TYPE`='BASE TABLE' and table_name like '%pickup%'");
+$link = mysqli_connect(DB_HOST, DB_UNAME, DB_PSWD);
+$result = mysqli_query($link, "show tables in " . DB_NAME . " like '%pickup%'");
+
 $table_names = array();
-for ($i=0; $i<count($rows); $i++) {
-    $row = $rows[$i];
-    array_push($table_names, $row["TABLE_NAME"]);
+while($cRow = mysqli_fetch_array($result))
+{
+    $table_names[] = $cRow[0];
 }
+
+mysqli_close($link);
 print json_encode($table_names);
