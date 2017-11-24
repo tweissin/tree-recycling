@@ -413,10 +413,16 @@ Boy Scout Troop 4 - Christmas Tree Pickup Service
 
       <br>
 
+          <?php
+          $too_many = false;
+          if ($too_many) {
+          ?>
           <span style="color:red; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">
-      Thanks very much for your interest in Christmas Tree collection/recycling and for supporting our local Scouts.  Unfortunately we have reached the maximum number of trees we can manage and are not taking new requests for January 14, 2017.<br>
-      </span>
-
+Thanks very much  for your interest in Christmas Tree collection/recycling and for supporting our local Scouts.  Unfortunately we have reached the maximum number of trees we can manage and are not taking new requests for January 14, 2017.<br>
+</span>
+          <?php
+          }
+          ?>
 
           <span style="color:black; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">
        This service is ONLY available to households in Hopkinton, MA.
@@ -428,7 +434,7 @@ Boy Scout Troop 4 - Christmas Tree Pickup Service
       </span>
 
       <br><br>
-      <b>NOTE: Requests will not be accepted after 9 am the day before the scheduled pickup.
+      <b>NOTE: New requests will be shut down 3 days before actual pickup to give time for route planning.
 
       <br><br>
       <span style="color: #006600; font-weight: bold;">
@@ -438,7 +444,7 @@ Boy Scout Troop 4 - Christmas Tree Pickup Service
       </span>
 
       <span style="color:black; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">
-      The cost of the service is $10 for each tree.  <br>
+      The cost of the service is $15 for each tree.  <br>
       </span>
 
       <span style="color: #006600; font-weight: bold;">
