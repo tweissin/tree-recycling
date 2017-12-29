@@ -49,7 +49,7 @@ for( $i = 0; $i < 3; $i++)
 {
     $parts = split( "/", $dts[$i]);
     $table_info[$i]['date'] = $parts[0];
-    if (array_count_values($parts)==2) {
+    if (count($parts)==2) {
         $table_info[$i]['closed'] = $parts[1];
     }
 }
