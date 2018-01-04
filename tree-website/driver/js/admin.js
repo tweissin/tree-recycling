@@ -26,7 +26,7 @@ $(document).ready(function() {
     }
     function importIt(tableName) {
         setStatus("");
-        var data = $("#jsonRecords").text();
+        var data = $("#jsonRecords").val();
         var jsonData = JSON.parse(data);
         $.ajax({
             type: 'POST',

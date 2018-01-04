@@ -13,6 +13,10 @@ if (!check_basic_auth_user())
 
 function export_to_csv($table_name) {
     $data = get_rows($table_name);
+
+    foreach ($data as &$row) {
+        $row["update"] = false;
+    }
     header('Content-Type: application/json; charset=UTF-8');
     print json_encode($data);
 }
@@ -31,6 +35,49 @@ function does_row_exist($current_rows, $data_for_import) {
         }
     }
     return false;
+}
+
+function update_row($link, $schema, $table_name, $data_for_import, &$records_updated) {
+    $stmt = "UPDATE $table_name SET ";
+    $first = true;
+
+    foreach ($schema as $field => $type) {
+        if (array_key_exists($field, $data_for_import)) {
+            if ($field=="id") {
+                continue;
+            }
+
+            if (!$first) {
+                $stmt = "$stmt, ";
+            }
+
+            $first = false;
+            $stmt = "${stmt}${field}=";
+
+            $val = $data_for_import[$field];
+            if ($type=="text") {
+                $val = mysql_real_escape_string($val);
+                $stmt = "${stmt}'${val}'";
+            } else {
+                if (strlen($val)==0) {
+                    $val = 0;
+                }
+                $stmt = "${stmt}${val}";
+            }
+        }
+    }
+
+    $stmt = "${stmt} WHERE id=${data_for_import['id']}";
+
+    $success = mysqli_query($link, $stmt);
+    if (!$success) {
+        $last_err = error_get_last();
+        mysqli_query($link,"ROLLBACK");
+        print_r ($last_err);
+        error_exit("failed to update: " . $last_err["message"],1024);
+        return array();
+    }
+    $records_updated++;
 }
 
 function import_from_csv($table_name, $data) {
@@ -71,10 +118,18 @@ function import_from_csv($table_name, $data) {
 
     $current_rows = get_rows($table_name);
     $records_imported = 0;
+    $records_updated = 0;
 
+    $log = "";
     for ($i=0; $i<count($data); $i++) {
         $data_for_import = $data[$i];
         if (does_row_exist($current_rows, $data_for_import)) {
+            $log = "${log} ${$data_for_import} does_row_exist is true";
+            if ($data_for_import["update"]==true) {
+                $log = "${log} update=true";
+                update_row($link, $schema, $table_name, $data_for_import, $records_updated);
+            }
+
             continue;
         }
 
@@ -122,7 +177,12 @@ function import_from_csv($table_name, $data) {
         $records_imported++;
     }
     mysqli_query($link,"COMMIT");
-    return array("records_imported" => $records_imported);
+    return array(
+        "records_imported" => $records_imported,
+        "records_updated" => $records_updated,
+        "total_rows" => count($data)
+    //, "log" => $log
+    );
 }
 
 $str_json = file_get_contents('php://input');
