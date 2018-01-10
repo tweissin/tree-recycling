@@ -428,6 +428,12 @@ Thanks very much  for your interest in Christmas Tree collection/recycling and f
        This service is ONLY available to households in Hopkinton, MA.
 
       <br>
+
+      <span style="color:red; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">
+       NOTE:
+       </span>
+       We have reached the max trees we can accommodate for the first week of collection.  <span style="color:red; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">January 13th</span> is still available.
+
       <br>
 
       To request a pickup, please follow the 3 steps listed below.
@@ -767,16 +773,16 @@ Read what people had to say about our service!
     <table border="0" cellpadding="5" cellspacing="2">
     <tbody>
 
-    <tr><td width="3%">&nbsp;</td><td valign="top">HL</td><td><font size="2">A terrific service.  I hope you get a lot of trees and make a lot of money </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">JK</td><td><font size="2">great fundraising idea and service to offer. thanks. </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">NG</td><td><font size="2">Great idea posting the info on the Hopkinton website...where I went to find out if you were doing it again this year.  Also, nice idea with the online form. </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">MO</td><td><font size="2">Great service.  We've used it the last few years and it seems like such a win-win idea!  Thanks. </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">VC</td><td><font size="2">I have used your service for several years - it is great - and a bargain! Thanks so much! Love your website!</font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">KO</td><td><font size="2">THANK YOU!  This is a great program, great community service and great new feature that it can be booked through the town site.  Kudos and Happy New Year. </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">JC</td><td><font size="2">This is a wonderful service, thank you very much! </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">LP</td><td><font size="2">This is my 3rd or 4th year using this service and it is so convenient!!! Thank you! </font></td></tr>
-    <tr><td width="3%">&nbsp;</td><td valign="top">MG</td><td><font size="2"> We appreciate the boy scouts providing this service each year.  Saves us alot of time and scratches on the car!! </font></td></tr>
-
+    <tr><td width="3%">&nbsp;</td><td valign="top">AC</td><td><font size="2">Love this service!!! Thank you!!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">TO</td><td><font size="2">We use you guys every year. Great service from a great troop!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">JM</td><td><font size="2">Thank you for providing such a great service!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">LB</td><td><font size="2">Love this service. Thank you Boy Scouts!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">PM</td><td><font size="2">Thank you very much for providing this terrific service! Best regards</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">DC</td><td><font size="2">Thanks for this service every year - happy holidays!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">ST</td><td><font size="2">Thank you guys so much! We always really appreciate this service!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">MQ</td><td><font size="2">As always Thank you for offering this service. It’s a huge help for us each holiday season!</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">AL</td><td><font size="2">Great service. Thank you for offering it to residents.</font></td></tr>
+    <tr><td width="3%">&nbsp;</td><td valign="top">SM</td><td><font size="2">Keep up the good work Troop 4 !!!</font></td></tr>
     </tbody>
     </table>
 
@@ -784,7 +790,7 @@ Read what people had to say about our service!
 
 
 <td valign="top">
-<center><b>Over 45 trailer loads recycled!</b><br>&nbsp
+<center><b>Last Tree Collection of this year will occur January 13 for those already signed up</b><br>&nbsp
 <img src="images/trees.jpg" border=3 style="vertical-align: top; width:80%"></center>
 </td>
 
@@ -797,7 +803,7 @@ Read what people had to say about our service!
 
 <div id="footer">
 
-<div class="left" style="font-size: 80%">&copy;2007-2011 <a href="http://stillwaterssoftware.com">Still Waters Software</a></div>
+<div class="left" style="font-size: 80%">&copy;2007-2018 <a href="http://stillwaterssoftware.com">Still Waters Software</a></div>
 
 </div>
 
