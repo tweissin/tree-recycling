@@ -429,10 +429,6 @@ Thanks very much  for your interest in Christmas Tree collection/recycling and f
 
       <br>
 
-      <span style="color:red; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">
-       NOTE:
-       </span>
-       We have reached the max trees we can accommodate for the first week of collection.  <span style="color:red; font-weight: bold; font-family: Comic Sans MS; font-size: 18px;">January 13th</span> is still available.
 
       <br>
 
@@ -790,7 +786,7 @@ Read what people had to say about our service!
 
 
 <td valign="top">
-<center><b>Last Tree Collection of this year will occur January 13 for those already signed up</b><br>&nbsp
+<center><br>&nbsp
 <img src="images/trees.jpg" border=3 style="vertical-align: top; width:80%"></center>
 </td>
 
